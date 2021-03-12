@@ -1,16 +1,21 @@
 # git-pics
 
-## 开发环境
+## 项目说明
+> 基于git实现图床功能。
+
+### 开发环境
 - go 1.16
 
-## 前置安装
+## 使用说明
+
+### 前置安装
 ```
 go get github.com/akavel/rsrc
 go get github.com/lxn/win
 go get github.com/lxn/walk
 ```
 
-## 编译
+### 编译使用
 1. 使用` rsrc tool`，生成`*.syso`文件
 ```
 rsrc -manifest main.manifest -o main.syso
@@ -26,8 +31,3 @@ go build -ldflags="-H windowsgui"
 ```
 git-pics.exe
 ```
-
-## 文件说明
-
-> `main.manifest` 是应用程序配置元数据的清单文件。
-> `main.manifest` 保存在 `main.go` 同级目录下。
