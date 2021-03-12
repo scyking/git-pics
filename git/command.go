@@ -1,32 +1,31 @@
 package git
 
 import (
-	"log"
+	"git-pics/config"
 	"os/exec"
 )
 
-func RunGitCommand(name string, arg ...string) string {
+var gitConfig config.GitConfig
+
+func runGitCommand(name string, arg ...string) (string, error) {
 	cmd := exec.Command(name, arg...)
+	cmd.Dir = "C:\\"
 	msg, err := cmd.CombinedOutput()
-	if err != nil {
-		log.Fatal("git 命令执行失败！", err)
-	}
-	return string(msg)
+	return string(msg), err
 }
 
-func Pull() {
-	//
+func Pull(branch string) (string, error) {
+	return runGitCommand("git", "pull", "origin", branch)
 }
 
-func Push() {
-	//
+func Push(branch string) (string, error) {
+	return runGitCommand("git", "push", "origin", branch)
 }
 
-func Clone() {
-	//
+func Clone(url string) (string, error) {
+	return runGitCommand("git", "clone", url)
 }
 
-func Version() {
-	result := RunGitCommand("git", "version")
-	log.Println("git version:", result)
+func Version() (string, error) {
+	return runGitCommand("git", "version")
 }
