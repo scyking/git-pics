@@ -106,24 +106,17 @@ type DirectoryTreeModel struct {
 func NewDirectoryTreeModel() (*DirectoryTreeModel, error) {
 	model := new(DirectoryTreeModel)
 
-	// 获取配置git工作路径
-	// C:\\ideaproject\\my-pics
-	drives, err := walk.DriveNames()
-	if err != nil {
-		return nil, err
-	}
+	// todo 从配置中读取工作路径
+	drives := []string{"C:\\workspace\\test"}
 
 	for _, drive := range drives {
-		switch drive {
-		case "A:\\", "B:\\":
-			continue
-		}
-
 		model.roots = append(model.roots, NewDirectory(drive, nil))
 	}
 
 	return model, nil
 }
+
+var _ walk.TreeModel = new(DirectoryTreeModel)
 
 func (*DirectoryTreeModel) LazyPopulation() bool {
 	// We don't want to eagerly populate our tree view with the whole file system.
@@ -137,8 +130,6 @@ func (m *DirectoryTreeModel) RootCount() int {
 func (m *DirectoryTreeModel) RootAt(index int) walk.TreeItem {
 	return m.roots[index]
 }
-
-var _ walk.TreeModel = new(DirectoryTreeModel)
 
 type FileInfo struct {
 	Name     string
