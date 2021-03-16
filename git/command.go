@@ -9,7 +9,7 @@ var gitConfig config.GitConfig
 
 func runGitCommand(name string, arg ...string) (string, error) {
 	cmd := exec.Command(name, arg...)
-	cmd.Dir = "C:\\"
+	cmd.Dir = "C:\\ideaproject\\my-pics"
 	msg, err := cmd.CombinedOutput()
 	return string(msg), err
 }

@@ -6,8 +6,7 @@ import (
 )
 
 func main() {
-	_, err := Build().Run()
-	if err != nil {
-		log.Println("启动失败！", err)
-	}
+	log.Println("开始启动")
+	Build().Run()
+	log.Println("启动成功！")
 }

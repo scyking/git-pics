@@ -1,40 +1,44 @@
 package windows
 
 import (
-	"github.com/lxn/walk"
-	. "github.com/lxn/walk/declarative"
 	"log"
-	"strings"
 )
 
-var mainWindow MainWindow
-var inTE, outTE *walk.TextEdit
+import (
+	"github.com/lxn/walk"
+	. "github.com/lxn/walk/declarative"
+)
 
-func Build() MainWindow {
+func Build() *walk.MainWindow {
+	var mainWindow *walk.MainWindow
+	var splitter *walk.Splitter
+	var treeView *walk.TreeView
 
-	mainWindow = MainWindow{
-		Title:   "SCREAMO",
-		MinSize: Size{600, 400},
-		Layout:  VBox{},
+	treeModel, err := NewDirectoryTreeModel()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("开始构建")
+	if err := (MainWindow{
+		AssignTo: &mainWindow,
+		Title:    "GPics",
+		MinSize:  Size{600, 400},
+		Layout:   VBox{},
 		Children: []Widget{
 			HSplitter{
+				AssignTo: &splitter,
 				Children: []Widget{
-					TextEdit{AssignTo: &inTE},
-					TextEdit{AssignTo: &outTE, ReadOnly: true},
+					TreeView{
+						AssignTo: &treeView,
+						Model:    treeModel,
+					},
 				},
 			},
-			PushButton{
-				Text:      "SCREAM",
-				OnClicked: PushButtonOnClicked,
-			},
 		},
+	}.Create()); err != nil {
+		log.Fatal(err)
 	}
+	log.Println("构建结束")
 	return mainWindow
-}
-
-func PushButtonOnClicked() {
-	err := outTE.SetText(strings.ToUpper(inTE.Text()))
-	if err != nil {
-		log.Println("SetText error:", err)
-	}
 }
