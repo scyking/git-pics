@@ -23,6 +23,8 @@ func DirFiles(filePath string) []string {
 
 func isImageFile(name string) bool {
 	ext := filepath.Ext(name)
+	// todo 匹配图片格式
+	// Image Files (*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff)|*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff
 	if ext == ".png" {
 		return true
 	}

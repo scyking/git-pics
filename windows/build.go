@@ -34,6 +34,9 @@ func Build() *walk.MainWindow {
 						Model:    treeModel,
 						OnCurrentItemChanged: func() {
 							dir := treeView.CurrentItem().(*Directory)
+							if err := walk.Resources.SetRootDirPath(dir.Path()); err != nil {
+								log.Fatal(err)
+							}
 							imageViewWidgets = ImageViewWidgets(dir.Path())
 						},
 					},
