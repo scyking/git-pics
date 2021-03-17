@@ -6,7 +6,8 @@ import (
 	"path/filepath"
 )
 
-func DirFiles(filePath string) []string {
+// 返回地址中图片名称数组
+func ImageFileNames(filePath string) []string {
 	var names []string
 
 	files, err := ioutil.ReadDir(filePath)

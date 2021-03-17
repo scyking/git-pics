@@ -2,8 +2,13 @@ package main
 
 import (
 	. "git-pics/windows"
+	"log"
 )
 
 func main() {
-	Build().Run()
+	win, err := Build()
+	if err != nil {
+		log.Fatal(err)
+	}
+	win.Run()
 }
