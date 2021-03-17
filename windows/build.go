@@ -18,8 +18,6 @@ func Build() (*walk.MainWindow, error) {
 	var scroll *walk.ScrollView
 	var te *walk.TextEdit
 
-	walk.Resources.SetRootDirPath("C:\\workspace\\test")
-
 	treeModel, err := NewDirectoryTreeModel()
 	if err != nil {
 		log.Fatal(err)
@@ -51,29 +49,10 @@ func Build() (*walk.MainWindow, error) {
 						AssignTo:      &vSplitter,
 						Children: []Widget{
 							ScrollView{
-								AssignTo: &scroll,
-								Name:     "Pictures",
-								Layout:   Grid{Columns: 2},
-								Children: []Widget{
-									ImageView{
-										MaxSize: Size{120, 120},
-										Image:   "1615799620(1).png",
-										Margin:  10,
-										Mode:    ImageViewModeZoom,
-									},
-									ImageView{
-										MaxSize: Size{120, 120},
-										Image:   "1615799620(1).png",
-										Margin:  10,
-										Mode:    ImageViewModeZoom,
-									},
-									ImageView{
-										MaxSize: Size{120, 120},
-										Image:   "1615799620(1).png",
-										Margin:  10,
-										Mode:    ImageViewModeZoom,
-									},
-								},
+								AssignTo:      &scroll,
+								Name:          "Pictures",
+								StretchFactor: 5,
+								Layout:        Grid{Columns: 2},
 							},
 							TextEdit{
 								AssignTo: &te,
@@ -137,7 +116,7 @@ func ImageViewWidgets(path string, parent walk.Container) {
 		img.SetMode(walk.ImageViewModeZoom)
 
 		size := walk.Size{120, 120}
-		if err := img.SetSize(size); err != nil {
+		if err := img.SetMinMaxSize(size, size); err != nil {
 			log.Fatal(err)
 		}
 	}
