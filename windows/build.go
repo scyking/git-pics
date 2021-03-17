@@ -12,9 +12,12 @@ import (
 func Build() *walk.MainWindow {
 	var mainWindow *walk.MainWindow
 	var treeView *walk.TreeView
-	var vSplitter *walk.Splitter
+	var splitter *walk.Splitter
+	var scroll *walk.ScrollView
 
-	var imageViewWidgets []Widget
+	//var imageViewWidgets []Widget
+
+	walk.Resources.SetRootDirPath("C:\\workspace\\test")
 
 	treeModel, err := NewDirectoryTreeModel()
 	if err != nil {
@@ -28,26 +31,43 @@ func Build() *walk.MainWindow {
 		Layout:   HBox{MarginsZero: true},
 		Children: []Widget{
 			HSplitter{
+				AssignTo: &splitter,
 				Children: []Widget{
 					TreeView{
 						AssignTo: &treeView,
 						Model:    treeModel,
 						OnCurrentItemChanged: func() {
 							dir := treeView.CurrentItem().(*Directory)
-							if err := walk.Resources.SetRootDirPath(dir.Path()); err != nil {
-								log.Fatal(err)
-							}
-							imageViewWidgets = ImageViewWidgets(dir.Path())
+							log.Println("path now :", dir.Path())
+							//if err := walk.Resources.SetRootDirPath(dir.Path()); err != nil {
+							//	log.Fatal(err)
+							//}
+							//imageViewWidgets = ImageViewWidgets(dir.Path())
+
 						},
 					},
-					VSplitter{
-						AssignTo: &vSplitter,
-						Children: imageViewWidgets,
+					ScrollView{
+						AssignTo:      &scroll,
+						Name:          "Pictures",
+						StretchFactor: 2,
+						Layout:        Grid{Columns: 1},
+						Children: []Widget{
+							ImageView{
+								MaxSize: Size{120, 120},
+								Image:   "1615799620(1).png",
+								Margin:  10,
+								Mode:    ImageViewModeZoom,
+							},
+						},
 					},
 				},
 			},
 		},
 	}.Create()); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := splitter.SetFixed(scroll, true); err != nil {
 		log.Fatal(err)
 	}
 
@@ -59,11 +79,14 @@ func ImageViewWidgets(filePath string) []Widget {
 
 	names := DirFiles(filePath)
 
-	for _, name := range names {
+	for i, name := range names {
+		log.Println(i, ". pic：", name)
 		widgets = append(widgets,
 			ImageView{
-				Image:  name,
-				Margin: 10,
+				MaxSize: Size{120, 120},
+				Image:   name,
+				Margin:  10,
+				Mode:    ImageViewModeZoom,
 			},
 		)
 	}
