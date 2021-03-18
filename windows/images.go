@@ -24,7 +24,7 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 	for _, name := range names {
 		iv := ImageView{
 			Image:   name,
-			Margin:  10,
+			Margin:  5,
 			MinSize: Size{120, 120},
 			MaxSize: Size{120, 120},
 			Mode:    ImageViewModeZoom,

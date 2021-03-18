@@ -10,11 +10,11 @@ import (
 )
 
 func Build() (*walk.MainWindow, error) {
-	var mainWindow *walk.MainWindow
-	var treeView *walk.TreeView
-	var hSplitter *walk.Splitter
-	var vSplitter *walk.Splitter
-	var scroll *walk.ScrollView
+	var mw *walk.MainWindow
+	var tv *walk.TreeView
+	var hs *walk.Splitter
+	var vs *walk.Splitter
+	var sv *walk.ScrollView
 	var te *walk.TextEdit
 
 	treeModel, err := NewDirectoryTreeModel()
@@ -23,37 +23,41 @@ func Build() (*walk.MainWindow, error) {
 	}
 
 	if err := (MainWindow{
-		AssignTo: &mainWindow,
+		AssignTo: &mw,
 		Title:    "GPics",
 		MinSize:  Size{600, 400},
 		Layout:   HBox{MarginsZero: true},
 		Children: []Widget{
 			HSplitter{
-				AssignTo: &hSplitter,
+				AssignTo: &hs,
 				Children: []Widget{
 					TreeView{
-						AssignTo: &treeView,
+						AssignTo: &tv,
 						Model:    treeModel,
 						OnCurrentItemChanged: func() {
-							dir := treeView.CurrentItem().(*Directory)
+							dir := tv.CurrentItem().(*Directory)
 							log.Println("path now :", dir.Path())
 							if err := te.SetText(dir.Path()); err != nil {
 								log.Fatal(err)
 							}
-							ClearWidgets(scroll)
-							AddImageViewWidgets(dir.Path(), scroll)
+							ClearWidgets(sv)
+							AddImageViewWidgets(dir.Path(), sv)
 						},
 					},
 					VSplitter{
 						StretchFactor: 5,
-						AssignTo:      &vSplitter,
+						AssignTo:      &vs,
 						Children: []Widget{
 							ScrollView{
-								AssignTo:      &scroll,
+								AssignTo:      &sv,
 								Name:          "Pictures",
 								StretchFactor: 5,
-								Layout:        Grid{Columns: 2},
-								Children:      []Widget{},
+								Layout: Flow{
+									MarginsZero: true,
+									Spacing:     5,
+									Alignment:   AlignHNearVCenter,
+								},
+								Children: []Widget{},
 							},
 							TextEdit{
 								AssignTo: &te,
@@ -77,8 +81,8 @@ func Build() (*walk.MainWindow, error) {
 		return nil, err
 	}
 
-	if err := vSplitter.SetFixed(scroll, true); err != nil {
+	if err := vs.SetFixed(sv, true); err != nil {
 		return nil, err
 	}
-	return mainWindow, nil
+	return mw, nil
 }
