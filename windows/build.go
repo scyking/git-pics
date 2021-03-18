@@ -2,7 +2,6 @@ package windows
 
 import (
 	"log"
-	"path/filepath"
 )
 
 import (
@@ -41,7 +40,9 @@ func Build() (*walk.MainWindow, error) {
 							if err := te.SetText(dir.Path()); err != nil {
 								log.Fatal(err)
 							}
+							log.Println("before children:", scroll.Children())
 							ImageViewWidgets(dir.Path(), scroll)
+							log.Println("after children:", scroll.Children())
 						},
 					},
 					VSplitter{
@@ -53,9 +54,11 @@ func Build() (*walk.MainWindow, error) {
 								Name:          "Pictures",
 								StretchFactor: 5,
 								Layout:        Grid{Columns: 2},
+								Children:      []Widget{},
 							},
 							TextEdit{
 								AssignTo: &te,
+								ReadOnly: true,
 								Text:     "test",
 							},
 							PushButton{
@@ -75,49 +78,52 @@ func Build() (*walk.MainWindow, error) {
 		return nil, err
 	}
 
+	if err := vSplitter.SetFixed(scroll, true); err != nil {
+		return nil, err
+	}
 	return mainWindow, nil
 }
 
 func ImageViewWidgets(path string, parent walk.Container) {
 
+	if err := walk.Resources.SetRootDirPath(path); err != nil {
+		log.Fatal(err)
+	}
+
+	ClearWidgets(parent)
+
 	names := ImageFileNames(path)
+	builder := NewBuilder(parent)
 
-	if parent.Children() != nil {
-		if err := parent.Children().Clear(); err != nil {
+	for _, name := range names {
+		iv := ImageView{
+			Image:   name,
+			Margin:  10,
+			MinSize: Size{120, 120},
+			MaxSize: Size{120, 120},
+			Mode:    ImageViewModeZoom,
+		}
+
+		if err := iv.Create(builder); err != nil {
 			log.Fatal(err)
 		}
 	}
 
-	for i, name := range names {
-		log.Println(i, ". pic：", name)
+}
 
-		img, err := walk.NewImageView(parent)
-		if err != nil {
-			log.Fatal(err)
+func ClearWidgets(parent walk.Container) {
+	widgets := parent.Children()
+	if widgets != nil {
+		parent.SetSuspended(true)
+		defer parent.SetSuspended(false)
+
+		for i := widgets.Len() - 1; i >= 0; i-- {
+			widgets.At(i).Dispose()
 		}
 
-		if err := img.SetMargin(10); err != nil {
-			log.Fatal(err)
-		}
-
-		filePath := filepath.Join(path, name)
-
-		log.Println("image path:", filePath)
-
-		image, err := walk.NewImageFromFileForDPI(filePath, 96)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if err := img.SetImage(image); err != nil {
-			log.Fatal(err)
-		}
-
-		img.SetName(name)
-		img.SetMode(walk.ImageViewModeZoom)
-
-		size := walk.Size{120, 120}
-		if err := img.SetMinMaxSize(size, size); err != nil {
+		if err := widgets.Clear(); err != nil {
 			log.Fatal(err)
 		}
 	}
+	log.Println("clear ok!")
 }

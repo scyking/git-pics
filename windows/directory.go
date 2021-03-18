@@ -107,7 +107,7 @@ func NewDirectoryTreeModel() (*DirectoryTreeModel, error) {
 	model := new(DirectoryTreeModel)
 
 	// todo 从配置中读取工作路径
-	drives := []string{"D:/Pictures"}
+	drives := []string{"C:/workspace/test"}
 
 	for _, drive := range drives {
 		model.roots = append(model.roots, NewDirectory(drive, nil))
