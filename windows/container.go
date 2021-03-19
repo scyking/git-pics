@@ -22,3 +22,15 @@ func ClearWidgets(container walk.Container) {
 	}
 	log.Println("widgets clear ok!")
 }
+
+// 清空容器中图片组件背景
+func ClearImageViewBackground(container walk.Container) {
+	widgets := container.Children()
+	if widgets != nil {
+		for i := widgets.Len() - 1; i >= 0; i-- {
+			if iv, ok := widgets.At(i).(*walk.ImageView); ok {
+				iv.SetBackground(walk.NullBrush())
+			}
+		}
+	}
+}

@@ -1,6 +1,7 @@
 package windows
 
 import (
+	"git-pics/files"
 	"log"
 )
 
@@ -16,7 +17,7 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 		log.Fatal(err)
 	}
 
-	names := ImageFileNames(path)
+	names := files.ImageFileNames(path)
 	log.Println("image names:", names)
 
 	builder := NewBuilder(parent)
@@ -58,15 +59,4 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 		}
 	}
 
-}
-
-func ClearImageViewBackground(container walk.Container) {
-	widgets := container.Children()
-	if widgets != nil {
-		for i := widgets.Len() - 1; i >= 0; i-- {
-			if iv, ok := widgets.At(i).(*walk.ImageView); ok {
-				iv.SetBackground(walk.NullBrush())
-			}
-		}
-	}
 }

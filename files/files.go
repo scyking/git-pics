@@ -1,4 +1,4 @@
-package windows
+package files
 
 import (
 	"io/ioutil"
