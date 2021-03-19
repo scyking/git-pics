@@ -1,7 +1,6 @@
 package main
 
 import (
-	. "git-pics/windows"
 	"log"
 )
 

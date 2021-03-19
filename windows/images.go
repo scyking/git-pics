@@ -51,6 +51,9 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 					}
 					civ.SetBackground(brush)
 				}
+				if button == walk.RightButton {
+					civ.SetEnabled(true)
+				}
 			},
 		}
 
