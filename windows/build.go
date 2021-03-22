@@ -1,7 +1,7 @@
-package gpics
+package windows
 
 import (
-	"gpics/windows"
+	"gpics/config"
 	"log"
 )
 
@@ -19,16 +19,16 @@ func Build() (*walk.MainWindow, error) {
 	var le *walk.LineEdit
 
 	// 数据绑定
-	db := windows.DBSource()
+	db := DBSource()
 
-	treeModel, err := windows.NewDirectoryTreeModel()
+	treeModel, err := NewDirectoryTreeModel()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if err := (MainWindow{
 		AssignTo: &mw,
-		Title:    PName,
+		Title:    config.PName,
 		MinSize:  Size{600, 400},
 		Layout:   HBox{MarginsZero: true},
 		DataBinder: DataBinder{
@@ -43,13 +43,13 @@ func Build() (*walk.MainWindow, error) {
 						AssignTo: &tv,
 						Model:    treeModel,
 						OnCurrentItemChanged: func() {
-							dir := tv.CurrentItem().(*windows.Directory)
+							dir := tv.CurrentItem().(*Directory)
 							log.Println("path now :", dir.Path())
 							if err := le.SetText(dir.Path()); err != nil {
 								log.Fatal(err)
 							}
-							windows.ClearWidgets(sv)
-							windows.AddImageViewWidgets(dir.Path(), sv)
+							ClearWidgets(sv)
+							AddImageViewWidgets(dir.Path(), sv)
 						},
 					},
 					VSplitter{
@@ -75,12 +75,12 @@ func Build() (*walk.MainWindow, error) {
 								Text:     "test",
 							},
 							RadioButtonGroup{
-								DataMember: windows.DBTextType,
+								DataMember: DBTextType,
 								Buttons: []RadioButton{
 									{
 										Name:  "'Markdown' Text",
 										Text:  "Markdown",
-										Value: windows.Markdown,
+										Value: Markdown,
 										OnClicked: func() {
 											//
 										},
@@ -88,17 +88,17 @@ func Build() (*walk.MainWindow, error) {
 									{
 										Name:  "'HTML' Text",
 										Text:  "HTML",
-										Value: windows.HTML,
+										Value: HTML,
 									},
 									{
 										Name:  "'URL' Text",
 										Text:  "URL",
-										Value: windows.URL,
+										Value: URL,
 									},
 									{
 										Name:  "'FilePath' Text",
 										Text:  "FilePath",
-										Value: windows.FilePath,
+										Value: FilePath,
 									},
 								},
 							},
