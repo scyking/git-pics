@@ -1,7 +1,7 @@
 package windows
 
 import (
-	"git-pics/files"
+	"gpics/files"
 	"log"
 )
 
@@ -32,16 +32,6 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 			MinSize:  Size{120, 120},
 			MaxSize:  Size{120, 120},
 			Mode:     ImageViewModeZoom,
-			OnBoundsChanged: func() {
-				//civ.Background().Dispose()
-			},
-			OnMouseMove: func(x, y int, button walk.MouseButton) {
-				/*brush, err := walk.NewSolidColorBrush(walk.RGB(159, 215, 255))
-				if err != nil {
-					log.Fatal(err)
-				}
-				civ.SetBackground(brush)*/
-			},
 			OnMouseDown: func(x, y int, button walk.MouseButton) {
 				if button == walk.LeftButton {
 					ClearImageViewBackground(parent)
@@ -50,9 +40,15 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 						log.Fatal(err)
 					}
 					civ.SetBackground(brush)
+
+					textType := parent.DataBinder().DataSource().(map[string]int)[DBTextType]
+
+					if err := Copy(civ.Name(), textType); err != nil {
+						log.Fatal(err)
+					}
 				}
 				if button == walk.RightButton {
-					civ.SetEnabled(true)
+
 				}
 			},
 		}

@@ -1,7 +1,7 @@
-package main
+package gpics
 
 import (
-	"git-pics/windows"
+	"gpics/windows"
 	"log"
 )
 
@@ -28,10 +28,11 @@ func Build() (*walk.MainWindow, error) {
 
 	if err := (MainWindow{
 		AssignTo: &mw,
-		Title:    "GPics",
+		Title:    PName,
 		MinSize:  Size{600, 400},
 		Layout:   HBox{MarginsZero: true},
 		DataBinder: DataBinder{
+			AutoSubmit: true,
 			DataSource: db,
 		},
 		Children: []Widget{
@@ -58,6 +59,9 @@ func Build() (*walk.MainWindow, error) {
 							ScrollView{
 								AssignTo: &sv,
 								Name:     "Pictures",
+								DataBinder: DataBinder{
+									DataSource: db,
+								},
 								Layout: Flow{
 									MarginsZero: true,
 									Spacing:     5,
@@ -77,6 +81,9 @@ func Build() (*walk.MainWindow, error) {
 										Name:  "'Markdown' Text",
 										Text:  "Markdown",
 										Value: windows.Markdown,
+										OnClicked: func() {
+											//
+										},
 									},
 									{
 										Name:  "'HTML' Text",

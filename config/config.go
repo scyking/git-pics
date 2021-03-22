@@ -1,6 +1,10 @@
 package config
 
 type GitConfig struct {
-	Url string // git 地址
-	Dir string // git仓库所在目录
+	Urls      []string // git 地址
+	Workspace string   // git 仓库所在工作目录
+}
+
+func Init() {
+
 }

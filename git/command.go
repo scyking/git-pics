@@ -1,7 +1,7 @@
 package git
 
 import (
-	"git-pics/config"
+	"gpics/config"
 	"os/exec"
 )
 
