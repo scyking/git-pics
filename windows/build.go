@@ -57,54 +57,57 @@ func Build() (*walk.MainWindow, error) {
 						},
 					},
 					VSplitter{
-						StretchFactor: 5,
 						AssignTo:      &vs,
+						StretchFactor: 5,
 						Children: []Widget{
-							ScrollView{
-								AssignTo: &sv,
-								Name:     "Pictures",
-								DataBinder: DataBinder{
-									DataSource: db,
+							HSplitter{
+								Children: []Widget{
+									RadioButtonGroup{
+										DataMember: DBTextType,
+										Buttons: []RadioButton{
+											{
+												Name:  "'Markdown' Text",
+												Text:  "Markdown",
+												Value: Markdown,
+												OnClicked: func() {
+													//
+												},
+											},
+											{
+												Name:  "'HTML' Text",
+												Text:  "HTML",
+												Value: HTML,
+											},
+											{
+												Name:  "'URL' Text",
+												Text:  "URL",
+												Value: URL,
+											},
+											{
+												Name:  "'FilePath' Text",
+												Text:  "FilePath",
+												Value: FilePath,
+											},
+										},
+									},
 								},
-								Layout: Flow{
-									MarginsZero: true,
-									Spacing:     5,
-									Alignment:   AlignHNearVCenter,
-								},
-								Children: []Widget{},
 							},
 							LineEdit{
 								AssignTo: &le,
 								ReadOnly: true,
 								Text:     "test",
 							},
-							RadioButtonGroup{
-								DataMember: DBTextType,
-								Buttons: []RadioButton{
-									{
-										Name:  "'Markdown' Text",
-										Text:  "Markdown",
-										Value: Markdown,
-										OnClicked: func() {
-											//
-										},
-									},
-									{
-										Name:  "'HTML' Text",
-										Text:  "HTML",
-										Value: HTML,
-									},
-									{
-										Name:  "'URL' Text",
-										Text:  "URL",
-										Value: URL,
-									},
-									{
-										Name:  "'FilePath' Text",
-										Text:  "FilePath",
-										Value: FilePath,
-									},
+							ScrollView{
+								AssignTo:      &sv,
+								Name:          "Pictures",
+								VerticalFixed: true,
+								DataBinder: DataBinder{
+									DataSource: db,
 								},
+								Layout: Flow{
+									Alignment: AlignHNearVCenter,
+								},
+								Children: []Widget{},
 							},
 						},
 					},
