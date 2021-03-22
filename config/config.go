@@ -14,6 +14,7 @@ const (
 	Workspace = "workspace"
 )
 
+// 更换成 walk.Resources.RootDirPath()
 var CmdDir = ""
 
 func InitConfig() {
