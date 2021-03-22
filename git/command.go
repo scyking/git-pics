@@ -1,15 +1,19 @@
 package git
 
 import (
+	"errors"
 	"gpics/config"
 	"os/exec"
 )
 
-var gitConfig config.GitConfig
-
 func runGitCommand(name string, arg ...string) (string, error) {
+	dir := config.CmdDir
+	if dir == "" {
+		return "", errors.New("cmd dir is error")
+	}
+
 	cmd := exec.Command(name, arg...)
-	cmd.Dir = "C:\\ideaproject\\my-pics"
+	cmd.Dir = dir
 	msg, err := cmd.CombinedOutput()
 	return string(msg), err
 }

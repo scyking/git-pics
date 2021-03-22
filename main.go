@@ -12,14 +12,7 @@ func main() {
 	app.SetOrganizationName(config.Author)
 	app.SetProductName(config.PName)
 
-	settings := walk.NewIniFileSettings("settings.ini")
-	log.Println("setting file path：", settings.FilePath())
-
-	if err := settings.Load(); err != nil {
-		log.Fatal(err)
-	}
-
-	app.SetSettings(settings)
+	config.InitConfig()
 
 	win, err := windows.Build()
 	if err != nil {

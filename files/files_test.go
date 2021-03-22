@@ -1,7 +1,7 @@
 package files_test
 
 import (
-	"git-pics/files"
+	"gpics/files"
 	"log"
 	"testing"
 )
