@@ -18,15 +18,13 @@ func Build() (*walk.MainWindow, error) {
 	var sv *walk.ScrollView
 	var le *walk.LineEdit
 
+	// 数据绑定
+	db := windows.DBSource()
+
 	treeModel, err := windows.NewDirectoryTreeModel()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// 数据绑定
-	db := make(map[string]string)
-	// 设置text type默认类型
-	db["tt"] = "b"
 
 	if err := (MainWindow{
 		AssignTo: &mw,
@@ -73,27 +71,27 @@ func Build() (*walk.MainWindow, error) {
 								Text:     "test",
 							},
 							RadioButtonGroup{
-								DataMember: "tt",
+								DataMember: windows.DBTextType,
 								Buttons: []RadioButton{
 									{
 										Name:  "'Markdown' Text",
 										Text:  "Markdown",
-										Value: "a",
+										Value: windows.Markdown,
 									},
 									{
 										Name:  "'HTML' Text",
 										Text:  "HTML",
-										Value: "b",
+										Value: windows.HTML,
 									},
 									{
 										Name:  "'URL' Text",
 										Text:  "URL",
-										Value: "c",
+										Value: windows.URL,
 									},
 									{
 										Name:  "'FilePath' Text",
 										Text:  "FilePath",
-										Value: "d",
+										Value: windows.FilePath,
 									},
 								},
 							},
