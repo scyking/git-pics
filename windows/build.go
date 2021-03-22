@@ -35,6 +35,10 @@ func Build() (*walk.MainWindow, error) {
 			AutoSubmit: true,
 			DataSource: db,
 		},
+		OnDropFiles: func(files []string) {
+			//todo 上传文件
+			log.Println(files)
+		},
 		Children: []Widget{
 			HSplitter{
 				AssignTo: &hs,
