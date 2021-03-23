@@ -7,6 +7,10 @@ import (
 )
 
 func TestDirFiles(t *testing.T) {
-	names := files.ImageFileNames("C:\\workspace\\test")
+	names, err := files.ImageFileNames("C:\\workspace\\test")
+	if err != nil {
+		log.Println(err)
+	}
+
 	log.Println(names)
 }

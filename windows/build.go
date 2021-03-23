@@ -90,6 +90,20 @@ func Build() (*walk.MainWindow, error) {
 											},
 										},
 									},
+									PushButton{
+										Text: "添加图片",
+										OnClicked: func() {
+											if err := OpenImage(mw); err != nil {
+												log.Fatal(err)
+											}
+										},
+									},
+									PushButton{
+										Text: "屏幕截图",
+									},
+									PushButton{
+										Text: "手动Push",
+									},
 								},
 							},
 							LineEdit{

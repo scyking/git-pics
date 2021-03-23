@@ -59,3 +59,21 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 	}
 
 }
+
+func OpenImage(mw *walk.MainWindow) error {
+	dlg := new(walk.FileDialog)
+
+	dlg.FilePath = walk.Resources.RootDirPath()
+	dlg.Filter = "Image Files (*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff)|*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff"
+	dlg.Title = "Select an Image"
+
+	if ok, err := dlg.ShowOpen(mw); err != nil {
+		return err
+	} else if !ok {
+		return nil
+	}
+
+	log.Println("select image path : ", dlg.FilePath)
+
+	return nil
+}
