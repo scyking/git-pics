@@ -3,6 +3,7 @@ package files
 import (
 	"bytes"
 	"encoding/hex"
+	"io/fs"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -152,6 +153,12 @@ func ImageFileNames(filePath string) ([]string, error) {
 
 // 将filepath中文件拷贝到目标target目录中
 func CopyFile(filePath string, target string) error {
-	// todo
-	return nil
+
+	src, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
+	// todo 生成文件名
+	name := "1.png"
+	return ioutil.WriteFile(filepath.Join(target, name), src, fs.ModeAppend)
 }

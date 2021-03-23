@@ -1,6 +1,7 @@
 package windows
 
 import (
+	"gpics/config"
 	"gpics/files"
 	"log"
 )
@@ -17,7 +18,11 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 		log.Fatal(err)
 	}
 
-	names := files.ImageFileNames(path)
+	names, err := files.ImageFileNames(path)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Println("image names:", names)
 
 	builder := NewBuilder(parent)
@@ -61,9 +66,17 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 }
 
 func OpenImage(mw *walk.MainWindow) error {
+	rootPath := walk.Resources.RootDirPath()
+	for _, path := range config.Workspaces() {
+		if path == rootPath {
+			// todo 修改为提示
+			log.Println("图片上传至工作空间根目录，图片无法使用！")
+		}
+	}
+
 	dlg := new(walk.FileDialog)
 
-	dlg.FilePath = walk.Resources.RootDirPath()
+	dlg.FilePath = rootPath
 	dlg.Filter = "Image Files (*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff)|*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff"
 	dlg.Title = "Select an Image"
 
@@ -73,7 +86,9 @@ func OpenImage(mw *walk.MainWindow) error {
 		return nil
 	}
 
-	log.Println("select image path : ", dlg.FilePath)
+	if err := files.CopyFile(dlg.FilePath, rootPath); err != nil {
+		return err
+	}
 
 	return nil
 }

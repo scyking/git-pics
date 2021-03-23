@@ -14,3 +14,9 @@ func TestDirFiles(t *testing.T) {
 
 	log.Println(names)
 }
+
+func TestCopyFile(t *testing.T) {
+	if err := files.CopyFile("C:\\workspace\\test\\test.png", "C:\\workspace\\test"); err != nil {
+		log.Println(err)
+	}
+}
