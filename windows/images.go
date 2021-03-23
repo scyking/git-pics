@@ -28,36 +28,7 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 	builder := NewBuilder(parent)
 
 	for _, name := range names {
-		var civ *walk.ImageView
-		iv := ImageView{
-			AssignTo: &civ,
-			Name:     name,
-			Image:    name,
-			Margin:   5,
-			MinSize:  Size{120, 120},
-			MaxSize:  Size{120, 120},
-			Mode:     ImageViewModeZoom,
-			OnMouseDown: func(x, y int, button walk.MouseButton) {
-				if button == walk.LeftButton {
-					ClearImageViewBackground(parent)
-					brush, err := walk.NewSolidColorBrush(walk.RGB(143, 199, 239))
-					if err != nil {
-						log.Fatal(err)
-					}
-					civ.SetBackground(brush)
-
-					textType := parent.DataBinder().DataSource().(map[string]int)[DBTextType]
-
-					if err := Copy(civ.Name(), textType); err != nil {
-						log.Fatal(err)
-					}
-				}
-				if button == walk.RightButton {
-
-				}
-			},
-		}
-
+		iv := addImageView(name, parent)
 		if err := iv.Create(builder); err != nil {
 			log.Fatal(err)
 		}
@@ -65,7 +36,45 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 
 }
 
-func OpenImage(mw *walk.MainWindow) error {
+func AddImageViewWidget(name string, parent walk.Container) {
+	builder := NewBuilder(parent)
+	iv := addImageView(name, parent)
+	if err := iv.Create(builder); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func addImageView(name string, parent walk.Container) ImageView {
+	var civ *walk.ImageView
+	iv := ImageView{
+		AssignTo: &civ,
+		Name:     name,
+		Image:    name,
+		Margin:   5,
+		MinSize:  Size{120, 120},
+		MaxSize:  Size{120, 120},
+		Mode:     ImageViewModeZoom,
+		OnMouseDown: func(x, y int, button walk.MouseButton) {
+			if button == walk.LeftButton {
+				ClearImageViewBackground(parent)
+				brush, err := walk.NewSolidColorBrush(walk.RGB(143, 199, 239))
+				if err != nil {
+					log.Fatal(err)
+				}
+				civ.SetBackground(brush)
+
+				textType := parent.DataBinder().DataSource().(map[string]int)[DBTextType]
+
+				if err := Copy(civ.Name(), textType); err != nil {
+					log.Fatal(err)
+				}
+			}
+		},
+	}
+	return iv
+}
+
+func OpenImage(mw *walk.MainWindow) (string, error) {
 	rootPath := walk.Resources.RootDirPath()
 	for _, path := range config.Workspaces() {
 		if path == rootPath {
@@ -81,14 +90,10 @@ func OpenImage(mw *walk.MainWindow) error {
 	dlg.Title = "Select an Image"
 
 	if ok, err := dlg.ShowOpen(mw); err != nil {
-		return err
+		return "", err
 	} else if !ok {
-		return nil
+		return "", nil
 	}
 
-	if err := files.CopyFile(dlg.FilePath, rootPath); err != nil {
-		return err
-	}
-
-	return nil
+	return files.CopyFile(dlg.FilePath, rootPath)
 }

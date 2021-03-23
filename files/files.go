@@ -155,15 +155,15 @@ func ImageFileNames(filePath string) ([]string, error) {
 }
 
 // 将filepath中文件拷贝到目标target目录中
-func CopyFile(filePath string, target string) error {
+func CopyFile(filePath string, target string) (string, error) {
 
 	src, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		return err
+		return "", err
 	}
 	name := genFileName() + filepath.Ext(filePath)
 
-	return ioutil.WriteFile(filepath.Join(target, name), src, fs.ModeAppend)
+	return name, ioutil.WriteFile(filepath.Join(target, name), src, fs.ModeAppend)
 }
 
 func genFileName() string {

@@ -93,9 +93,11 @@ func Build() (*walk.MainWindow, error) {
 									PushButton{
 										Text: "添加图片",
 										OnClicked: func() {
-											if err := OpenImage(mw); err != nil {
+											name, err := OpenImage(mw)
+											if err != nil {
 												log.Fatal(err)
 											}
+											AddImageViewWidget(name, sv)
 										},
 									},
 									PushButton{
