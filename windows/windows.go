@@ -55,7 +55,7 @@ func html(name string, rootPath string) (string, error) {
 }
 
 func url(name string, rootPath string) (string, error) {
-	workspace := "C:/workspace/test"
+	workspace := "C:/workspace/test" //todo git 工作目录
 	abs := filepath.Join(rootPath, name)
 
 	rel, err := filepath.Rel(workspace, abs)
