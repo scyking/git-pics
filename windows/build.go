@@ -97,7 +97,7 @@ func Build() (*walk.MainWindow, error) {
 											if err != nil {
 												log.Fatal(err)
 											}
-											AddImageViewWidget(name, sv)
+											mw.addImageViewWidget(name, sv)
 										},
 									},
 									PushButton{
