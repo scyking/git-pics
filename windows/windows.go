@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"gpics/git"
+	"log"
 	"path/filepath"
 )
 
@@ -19,6 +20,31 @@ const (
 	URL
 	FilePath
 )
+
+type MyMainWindow struct {
+	*walk.MainWindow
+	ImageName string
+	DBSource  map[string]int
+}
+
+func (mw *MyMainWindow) clickRadio() {
+	log.Println("textType:", mw.DBSource[DBTextType])
+	if mw.ImageName != "" {
+		if err := Copy(mw.ImageName, mw.DBSource[DBTextType]); err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
+// 数据绑定
+func DBSource() map[string]int {
+	// 数据绑定
+	db := make(map[string]int)
+	// 设置text type默认类型
+	db[DBTextType] = FilePath
+
+	return db
+}
 
 func markdown(name string, rootPath string) (string, error) {
 	url, err := url(name, rootPath)
@@ -79,16 +105,6 @@ func pathByTextType(name string, textType int) (string, error) {
 	}
 }
 
-// 数据绑定
-func DBSource() map[string]int {
-	// 数据绑定
-	db := make(map[string]int)
-	// 设置text type默认类型
-	db[DBTextType] = FilePath
-
-	return db
-}
-
 // 根据配置生成“文件”path
 func Copy(name string, textType int) error {
 	if name == "" {
@@ -99,8 +115,18 @@ func Copy(name string, textType int) error {
 	if err != nil {
 		return err
 	}
-	if err := walk.Clipboard().SetText(v); err != nil {
+	log.Println("copy value:", v)
+
+	t, err := walk.Clipboard().Text()
+	if err != nil {
 		return err
 	}
-	return nil
+
+	if t != "" {
+		if err := walk.Clipboard().Clear(); err != nil {
+			return err
+		}
+	}
+
+	return walk.Clipboard().SetText(v)
 }

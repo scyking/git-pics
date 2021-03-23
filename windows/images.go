@@ -12,7 +12,7 @@ import (
 )
 
 // 将路径中图片做为ImageView组件添加到容器中
-func AddImageViewWidgets(path string, parent walk.Container) {
+func (mw *MyMainWindow) addImageViewWidgets(path string, parent walk.Container) {
 
 	if err := walk.Resources.SetRootDirPath(path); err != nil {
 		log.Fatal(err)
@@ -28,7 +28,7 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 	builder := NewBuilder(parent)
 
 	for _, name := range names {
-		iv := addImageView(name, parent)
+		iv := mw.addImageView(name, parent)
 		if err := iv.Create(builder); err != nil {
 			log.Fatal(err)
 		}
@@ -36,15 +36,15 @@ func AddImageViewWidgets(path string, parent walk.Container) {
 
 }
 
-func AddImageViewWidget(name string, parent walk.Container) {
+func (mw *MyMainWindow) addImageViewWidget(name string, parent walk.Container) {
 	builder := NewBuilder(parent)
-	iv := addImageView(name, parent)
+	iv := mw.addImageView(name, parent)
 	if err := iv.Create(builder); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func addImageView(name string, parent walk.Container) ImageView {
+func (mw *MyMainWindow) addImageView(name string, parent walk.Container) ImageView {
 	var civ *walk.ImageView
 	iv := ImageView{
 		AssignTo: &civ,
@@ -68,6 +68,8 @@ func addImageView(name string, parent walk.Container) ImageView {
 				if err := Copy(civ.Name(), textType); err != nil {
 					log.Fatal(err)
 				}
+
+				mw.ImageName = civ.Name()
 			}
 		},
 	}
