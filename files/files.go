@@ -168,5 +168,12 @@ func CopyFile(filePath string, target string) error {
 
 func genFileName() string {
 	now := time.Now()
-	return fmt.Sprintf("%d%d%d%d%d%d%d", now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), rand.Intn(100))
+	return fmt.Sprintf("%d%d%d%d%d%d%d",
+		now.Year(),
+		now.Month(),
+		now.Day(),
+		now.Hour(),
+		now.Minute(),
+		now.Second(),
+		rand.Intn(100))
 }
