@@ -3,13 +3,16 @@ package files
 import (
 	"bytes"
 	"encoding/hex"
+	"fmt"
 	"io/fs"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 var fileTypeMap sync.Map
@@ -158,7 +161,12 @@ func CopyFile(filePath string, target string) error {
 	if err != nil {
 		return err
 	}
-	// todo 生成文件名
-	name := "1.png"
+	name := genFileName() + filepath.Ext(filePath)
+
 	return ioutil.WriteFile(filepath.Join(target, name), src, fs.ModeAppend)
+}
+
+func genFileName() string {
+	now := time.Now()
+	return fmt.Sprintf("%d%d%d%d%d%d%d", now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), rand.Intn(100))
 }
