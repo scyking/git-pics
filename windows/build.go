@@ -10,15 +10,20 @@ import (
 	. "github.com/lxn/walk/declarative"
 )
 
+var mw = new(MyMainWindow)
+
+func init() {
+	db := make(map[string]int)
+	db[DBTextType] = FilePath
+	mw.DBSource = db
+}
+
 func Build() (*walk.MainWindow, error) {
 	var tv *walk.TreeView
 	var hs *walk.Splitter
 	var vs *walk.Splitter
 	var sv *walk.ScrollView
 	var le *walk.LineEdit
-
-	mw := new(MyMainWindow)
-	mw.DBSource = DBSource()
 
 	treeModel, err := NewDirectoryTreeModel()
 	if err != nil {
@@ -93,7 +98,7 @@ func Build() (*walk.MainWindow, error) {
 									PushButton{
 										Text: "添加图片",
 										OnClicked: func() {
-											name, err := OpenImage(mw.MainWindow)
+											name, err := mw.openImage()
 											if err != nil {
 												log.Fatal(err)
 											}

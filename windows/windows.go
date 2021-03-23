@@ -36,16 +36,6 @@ func (mw *MyMainWindow) clickRadio() {
 	}
 }
 
-// 数据绑定
-func DBSource() map[string]int {
-	// 数据绑定
-	db := make(map[string]int)
-	// 设置text type默认类型
-	db[DBTextType] = FilePath
-
-	return db
-}
-
 func markdown(name string, rootPath string) (string, error) {
 	url, err := url(name, rootPath)
 	if err != nil {

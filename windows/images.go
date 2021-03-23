@@ -76,7 +76,7 @@ func (mw *MyMainWindow) addImageView(name string, parent walk.Container) ImageVi
 	return iv
 }
 
-func OpenImage(mw *walk.MainWindow) (string, error) {
+func (mw *MyMainWindow) openImage() (string, error) {
 	rootPath := walk.Resources.RootDirPath()
 	for _, path := range config.Workspaces() {
 		if path == rootPath {
