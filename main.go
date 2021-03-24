@@ -12,8 +12,6 @@ func main() {
 	app.SetOrganizationName(config.Author)
 	app.SetProductName(config.PName)
 
-	config.InitConfig()
-
 	win, err := windows.Build()
 	if err != nil {
 		log.Fatal(err)

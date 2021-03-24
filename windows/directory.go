@@ -107,12 +107,13 @@ type DirectoryTreeModel struct {
 func NewDirectoryTreeModel() (*DirectoryTreeModel, error) {
 	model := new(DirectoryTreeModel)
 
-	drives := config.Workspaces()
+	drive, err := config.Workspaces()
 
-	for _, drive := range drives {
-		model.roots = append(model.roots, NewDirectory(drive, nil))
+	if err != nil {
+		return nil, err
 	}
 
+	model.roots = append(model.roots, NewDirectory(drive, nil))
 	return model, nil
 }
 

@@ -1,23 +1,24 @@
 package config
 
 import (
+	"errors"
 	"github.com/lxn/walk"
 	"log"
+	"os"
+	"path/filepath"
 )
 
 const (
-	Author = "scyking"
-	PName  = "GPics"
+	Author        = "scyking"
+	PName         = "GPics"
+	defaultWSName = "GPicsWorkspace"
 )
 
 const (
-	Workspace = "workspace"
+	WorkspaceKey = "workspace"
 )
 
-// 更换成 walk.Resources.RootDirPath()
-var CmdDir = ""
-
-func InitConfig() {
+func init() {
 	app := walk.App()
 	settings := walk.NewIniFileSettings("settings.ini")
 	log.Println("setting file path：", settings.FilePath())
@@ -26,23 +27,38 @@ func InitConfig() {
 	if err := settings.Load(); err != nil {
 		log.Fatal(err)
 	}
-	//cmd.Dir = "C:\\ideaproject\\my-pics"
-	if v, ok := settings.Get(Workspace); ok {
-		CmdDir = v
+
+	if _, ok := settings.Get(WorkspaceKey); !ok {
+		if err := settings.Put(WorkspaceKey, defaultWS()); err != nil {
+			log.Fatal(err)
+		}
 	}
 
-	CmdDir = "C:\\ideaproject\\my-pics"
+	if err := settings.Save(); err != nil {
+		log.Fatal(err)
+	}
 
 	app.SetSettings(settings)
 }
 
 func Settings() walk.Settings {
-	app := walk.App()
-	return app.Settings()
+	return walk.App().Settings()
 }
 
 // 工作空间
-func Workspaces() []string {
-	//todo 目前不支持多工作空间
-	return []string{"C:/workspace/test"}
+func Workspaces() (string, error) {
+	w, ok := Settings().Get(WorkspaceKey)
+	if !ok {
+		return "", errors.New("工作空间配置不存在")
+	}
+	return w, nil
+}
+
+func defaultWS() string {
+	rp := walk.Resources.RootDirPath()
+	ws := filepath.Join(rp, defaultWSName)
+	if err := os.Mkdir(ws, os.ModeDir); err != nil {
+		log.Fatal(err)
+	}
+	return ws
 }
