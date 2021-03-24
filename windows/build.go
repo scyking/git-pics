@@ -2,6 +2,7 @@ package windows
 
 import (
 	"gpics/config"
+	"gpics/files"
 	"log"
 )
 
@@ -27,7 +28,7 @@ func Build() (*walk.MainWindow, error) {
 
 	treeModel, err := NewDirectoryTreeModel()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	if err := (MainWindow{
@@ -39,9 +40,15 @@ func Build() (*walk.MainWindow, error) {
 			AutoSubmit: true,
 			DataSource: mw.DBSource,
 		},
-		OnDropFiles: func(files []string) {
-			//todo 上传文件
-			log.Println(files)
+		OnDropFiles: func(fps []string) {
+			rootPath := walk.Resources.RootDirPath()
+			for _, fp := range fps {
+				name, err := files.CopyFile(fp, rootPath)
+				if err != nil {
+					log.Fatal(err)
+				}
+				mw.addImageViewWidget(name, sv)
+			}
 		},
 		Children: []Widget{
 			HSplitter{

@@ -13,8 +13,9 @@ func main() {
 	app.SetProductName(config.PName)
 
 	win, err := windows.Build()
+
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	win.Run()
 }
