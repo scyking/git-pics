@@ -111,12 +111,13 @@ func Copy(name string, textType int) error {
 	}
 	log.Println("copy value:", v)
 
-	t, err := walk.Clipboard().Text()
+	ok, err := walk.Clipboard().ContainsText()
+
 	if err != nil {
 		return err
 	}
 
-	if t != "" {
+	if ok {
 		if err := walk.Clipboard().Clear(); err != nil {
 			return err
 		}
