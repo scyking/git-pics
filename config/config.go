@@ -24,6 +24,9 @@ type Config struct {
 
 func init() {
 	app := walk.App()
+	app.SetOrganizationName(Author)
+	app.SetProductName(PName)
+
 	settings := walk.NewIniFileSettings("settings.ini")
 	log.Println("setting file path：", settings.FilePath())
 	log.Println("init root path: ", walk.Resources.RootDirPath())
@@ -61,7 +64,6 @@ func Workspaces() (string, error) {
 func SaveConfig(cf *Config) error {
 	log.Println("save config:", cf)
 
-	// todo 使用gui保存失败 测试方法无问题
 	// todo 检测ws正确性
 	st := Settings()
 
