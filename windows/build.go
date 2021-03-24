@@ -45,7 +45,7 @@ func Build() (*walk.MainWindow, error) {
 			for _, fp := range fps {
 				name, err := files.CopyFile(fp, rootPath)
 				if err != nil {
-					log.Fatal(err)
+					mw.errMBox(err)
 				}
 				mw.addImageViewWidget(name, sv)
 			}
@@ -61,7 +61,7 @@ func Build() (*walk.MainWindow, error) {
 							dir := tv.CurrentItem().(*Directory)
 							log.Println("path now :", dir.Path())
 							if err := le.SetText(dir.Path()); err != nil {
-								log.Fatal(err)
+								mw.errMBox(err)
 							}
 							ClearWidgets(sv)
 							mw.addImageViewWidgets(dir.Path(), sv)
@@ -107,7 +107,7 @@ func Build() (*walk.MainWindow, error) {
 										OnClicked: func() {
 											name, err := mw.openImage()
 											if err != nil {
-												log.Fatal(err)
+												mw.errMBox(err)
 											}
 											mw.addImageViewWidget(name, sv)
 										},

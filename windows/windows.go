@@ -27,6 +27,10 @@ type MyMainWindow struct {
 	DBSource  map[string]int
 }
 
+func (mw *MyMainWindow) errMBox(err error) {
+	walk.MsgBox(mw.MainWindow, "错误提示", err.Error(), walk.MsgBoxIconError)
+}
+
 func (mw *MyMainWindow) clickRadio() {
 	log.Println("textType:", mw.DBSource[DBTextType])
 	if mw.ImageName != "" {

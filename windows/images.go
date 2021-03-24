@@ -14,13 +14,13 @@ import (
 func (mw *MyMainWindow) addImageViewWidgets(path string, parent walk.Container) {
 
 	if err := walk.Resources.SetRootDirPath(path); err != nil {
-		log.Fatal(err)
+		mw.errMBox(err)
 	}
 
 	names, err := files.ImageFileNames(path)
 
 	if err != nil {
-		log.Fatal(err)
+		mw.errMBox(err)
 	}
 	log.Println("image names:", names)
 
@@ -29,7 +29,7 @@ func (mw *MyMainWindow) addImageViewWidgets(path string, parent walk.Container) 
 	for _, name := range names {
 		iv := mw.addImageView(name, parent)
 		if err := iv.Create(builder); err != nil {
-			log.Fatal(err)
+			mw.errMBox(err)
 		}
 	}
 
@@ -39,7 +39,7 @@ func (mw *MyMainWindow) addImageViewWidget(name string, parent walk.Container) {
 	builder := NewBuilder(parent)
 	iv := mw.addImageView(name, parent)
 	if err := iv.Create(builder); err != nil {
-		log.Fatal(err)
+		mw.errMBox(err)
 	}
 }
 
@@ -58,14 +58,14 @@ func (mw *MyMainWindow) addImageView(name string, parent walk.Container) ImageVi
 				ClearImageViewBackground(parent)
 				brush, err := walk.NewSolidColorBrush(walk.RGB(143, 199, 239))
 				if err != nil {
-					log.Fatal(err)
+					mw.errMBox(err)
 				}
 				civ.SetBackground(brush)
 
 				textType := parent.DataBinder().DataSource().(map[string]int)[DBTextType]
 
 				if err := Copy(civ.Name(), textType); err != nil {
-					log.Fatal(err)
+					mw.errMBox(err)
 				}
 
 				mw.ImageName = civ.Name()
