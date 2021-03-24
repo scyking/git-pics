@@ -50,6 +50,42 @@ func Build() (*walk.MainWindow, error) {
 				mw.addImageViewWidget(name, sv)
 			}
 		},
+		ToolBar: ToolBar{
+			Font:        Font{PointSize: 15},
+			ButtonStyle: ToolBarButtonTextOnly,
+			Items: []MenuItem{
+				Action{
+					Text: "Clone",
+				},
+				Separator{},
+				Action{
+					Text: "Pull",
+				},
+				Separator{},
+				Action{
+					Text: "Push",
+				},
+				Separator{},
+				Action{
+					Text: "添加图片",
+					OnTriggered: func() {
+						name, err := mw.openImage()
+						if err != nil {
+							mw.errMBox(err)
+						}
+						mw.addImageViewWidget(name, sv)
+					},
+				},
+				Separator{},
+				Action{
+					Text: "屏幕截图",
+				},
+				Separator{},
+				Action{
+					Text: "配置",
+				},
+			},
+		},
 		Children: []Widget{
 			HSplitter{
 				AssignTo: &hs,
@@ -101,22 +137,6 @@ func Build() (*walk.MainWindow, error) {
 												OnClicked: mw.clickRadio,
 											},
 										},
-									},
-									PushButton{
-										Text: "添加图片",
-										OnClicked: func() {
-											name, err := mw.openImage()
-											if err != nil {
-												mw.errMBox(err)
-											}
-											mw.addImageViewWidget(name, sv)
-										},
-									},
-									PushButton{
-										Text: "屏幕截图",
-									},
-									PushButton{
-										Text: "手动Push",
 									},
 								},
 							},
