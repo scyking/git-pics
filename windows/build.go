@@ -96,9 +96,19 @@ func Build() (*walk.MainWindow, error) {
 
 						cf.Workspace = ws
 
-						if cmd, err := RunConfigDialog(mw, cf); err != nil {
+						cmd, err := RunConfigDialog(mw, cf)
+						if err != nil {
 							mw.errMBox(err)
-						} else if cmd == walk.DlgCmdOK {
+						}
+
+						if cmd == walk.DlgCmdOK {
+							model := new(DirectoryTreeModel)
+							model.roots = append(model.roots, NewDirectory(ws, nil))
+
+							if err := tv.SetModel(model); err != nil {
+								mw.errMBox(err)
+							}
+
 							if err := config.SaveConfig(cf); err != nil {
 								mw.errMBox(err)
 								return

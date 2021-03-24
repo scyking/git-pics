@@ -62,8 +62,6 @@ func Workspaces() (string, error) {
 }
 
 func SaveConfig(cf *Config) error {
-	log.Println("save config:", cf)
-
 	// todo 检测ws正确性
 	st := Settings()
 
