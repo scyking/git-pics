@@ -18,6 +18,10 @@ const (
 	WorkspaceKey = "workspace"
 )
 
+type Config struct {
+	Workspace string
+}
+
 func init() {
 	app := walk.App()
 	settings := walk.NewIniFileSettings("settings.ini")
@@ -52,6 +56,14 @@ func Workspaces() (string, error) {
 		return "", errors.New("工作空间配置不存在")
 	}
 	return w, nil
+}
+
+func SaveWorkspace(ws string) error {
+	// todo 检测ws正确性
+	if err := Settings().Put(WorkspaceKey, ws); err != nil {
+		return err
+	}
+	return Settings().Save()
 }
 
 func defaultWS() string {

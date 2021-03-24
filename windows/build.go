@@ -85,6 +85,20 @@ func Build() (*walk.MainWindow, error) {
 				Separator{},
 				Action{
 					Text: "配置",
+					OnTriggered: func() {
+						cf := new(config.Config)
+						cf.Workspace, err = config.Workspaces()
+						if err != nil {
+							mw.errMBox(err)
+						}
+						if cmd, err := RunConfigDialog(mw, cf); err != nil {
+							log.Print(err)
+						} else if cmd == walk.DlgCmdOK {
+							if err := config.SaveWorkspace(cf.Workspace); err != nil {
+								mw.errMBox(err)
+							}
+						}
+					},
 				},
 			},
 		},
@@ -173,4 +187,61 @@ func Build() (*walk.MainWindow, error) {
 		return nil, err
 	}
 	return mw.MainWindow, nil
+}
+
+func RunConfigDialog(owner walk.Form, config *config.Config) (int, error) {
+	var dlg *walk.Dialog
+	var db *walk.DataBinder
+	var acceptPB, cancelPB *walk.PushButton
+
+	return Dialog{
+		AssignTo:      &dlg,
+		Title:         "配置",
+		DefaultButton: &acceptPB,
+		CancelButton:  &cancelPB,
+		DataBinder: DataBinder{
+			AssignTo:       &db,
+			Name:           "config",
+			DataSource:     config,
+			ErrorPresenter: ToolTipErrorPresenter{},
+		},
+		MinSize: Size{300, 300},
+		Layout:  VBox{},
+		Children: []Widget{
+			Composite{
+				Layout: Grid{Columns: 2},
+				Children: []Widget{
+					Label{
+						Text: "Workspace:",
+					},
+					LineEdit{
+						Text: Bind("Workspace"),
+					},
+				},
+			},
+			Composite{
+				Layout: HBox{},
+				Children: []Widget{
+					HSpacer{},
+					PushButton{
+						AssignTo: &acceptPB,
+						Text:     "OK",
+						OnClicked: func() {
+							if err := db.Submit(); err != nil {
+								log.Print(err)
+								return
+							}
+
+							dlg.Accept()
+						},
+					},
+					PushButton{
+						AssignTo:  &cancelPB,
+						Text:      "Cancel",
+						OnClicked: func() { dlg.Cancel() },
+					},
+				},
+			},
+		},
+	}.Run(owner)
 }

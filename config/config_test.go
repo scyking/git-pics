@@ -22,3 +22,14 @@ func TestSettings(t *testing.T) {
 	}
 	log.Println("workspace:", ws)
 }
+
+func TestSaveWorkspace(t *testing.T) {
+	if err := config.SaveWorkspace("test"); err != nil {
+		log.Println(err)
+	}
+	if ws, err := config.Workspaces(); err != nil {
+		log.Println(err)
+	} else {
+		log.Println(ws)
+	}
+}
