@@ -1,7 +1,6 @@
 package windows
 
 import (
-	"gpics/config"
 	"gpics/files"
 	"log"
 )
@@ -78,16 +77,10 @@ func (mw *MyMainWindow) addImageView(name string, parent walk.Container) ImageVi
 
 func (mw *MyMainWindow) openImage() (string, error) {
 	rootPath := walk.Resources.RootDirPath()
-	for _, path := range config.Workspaces() {
-		if path == rootPath {
-			// todo 修改为提示
-			log.Println("图片上传至工作空间根目录，图片无法使用！")
-		}
-	}
 
 	dlg := new(walk.FileDialog)
 
-	dlg.FilePath = rootPath
+	//dlg.FilePath = rootPath
 	dlg.Filter = "Image Files (*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff)|*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff"
 	dlg.Title = "Select an Image"
 
