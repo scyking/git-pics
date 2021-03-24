@@ -1,6 +1,7 @@
 package windows
 
 import (
+	"errors"
 	"gpics/files"
 	"log"
 )
@@ -84,10 +85,12 @@ func (mw *MyMainWindow) openImage() (string, error) {
 	dlg.Filter = "Image Files (*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff)|*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff"
 	dlg.Title = "Select an Image"
 
-	if ok, err := dlg.ShowOpen(mw); err != nil {
+	ok, err := dlg.ShowOpen(mw)
+	if err != nil {
 		return "", err
-	} else if !ok {
-		return "", nil
+	}
+	if !ok {
+		return "", errors.New("未选择文件")
 	}
 
 	return files.CopyFile(dlg.FilePath, rootPath)

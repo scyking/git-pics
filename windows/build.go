@@ -46,6 +46,7 @@ func Build() (*walk.MainWindow, error) {
 				name, err := files.CopyFile(fp, rootPath)
 				if err != nil {
 					mw.errMBox(err)
+					return
 				}
 				mw.addImageViewWidget(name, sv)
 			}
@@ -72,6 +73,7 @@ func Build() (*walk.MainWindow, error) {
 						name, err := mw.openImage()
 						if err != nil {
 							mw.errMBox(err)
+							return
 						}
 						mw.addImageViewWidget(name, sv)
 					},
@@ -98,6 +100,7 @@ func Build() (*walk.MainWindow, error) {
 							log.Println("path now :", dir.Path())
 							if err := le.SetText(dir.Path()); err != nil {
 								mw.errMBox(err)
+								return
 							}
 							ClearWidgets(sv)
 							mw.addImageViewWidgets(dir.Path(), sv)
