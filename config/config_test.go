@@ -24,7 +24,10 @@ func TestSettings(t *testing.T) {
 }
 
 func TestSaveWorkspace(t *testing.T) {
-	if err := config.SaveWorkspace("test"); err != nil {
+	cf := new(config.Config)
+	cf.Workspace = "C:\\workspace\\test\\GPicsWorkspace"
+
+	if err := config.SaveConfig(cf); err != nil {
 		log.Println(err)
 	}
 	if ws, err := config.Workspaces(); err != nil {

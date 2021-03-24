@@ -87,15 +87,21 @@ func Build() (*walk.MainWindow, error) {
 					Text: "配置",
 					OnTriggered: func() {
 						cf := new(config.Config)
-						cf.Workspace, err = config.Workspaces()
+						ws, err := config.Workspaces()
+
 						if err != nil {
 							mw.errMBox(err)
+							return
 						}
+
+						cf.Workspace = ws
+
 						if cmd, err := RunConfigDialog(mw, cf); err != nil {
-							log.Print(err)
+							mw.errMBox(err)
 						} else if cmd == walk.DlgCmdOK {
-							if err := config.SaveWorkspace(cf.Workspace); err != nil {
+							if err := config.SaveConfig(cf); err != nil {
 								mw.errMBox(err)
+								return
 							}
 						}
 					},
@@ -189,7 +195,7 @@ func Build() (*walk.MainWindow, error) {
 	return mw.MainWindow, nil
 }
 
-func RunConfigDialog(owner walk.Form, config *config.Config) (int, error) {
+func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 	var dlg *walk.Dialog
 	var db *walk.DataBinder
 	var acceptPB, cancelPB *walk.PushButton
@@ -202,7 +208,7 @@ func RunConfigDialog(owner walk.Form, config *config.Config) (int, error) {
 		DataBinder: DataBinder{
 			AssignTo:       &db,
 			Name:           "config",
-			DataSource:     config,
+			DataSource:     cf,
 			ErrorPresenter: ToolTipErrorPresenter{},
 		},
 		MinSize: Size{300, 300},

@@ -58,12 +58,18 @@ func Workspaces() (string, error) {
 	return w, nil
 }
 
-func SaveWorkspace(ws string) error {
+func SaveConfig(cf *Config) error {
+	log.Println("save config:", cf)
+
+	// todo 使用gui保存失败 测试方法无问题
 	// todo 检测ws正确性
-	if err := Settings().Put(WorkspaceKey, ws); err != nil {
+	st := Settings()
+
+	if err := st.Put(WorkspaceKey, cf.Workspace); err != nil {
 		return err
 	}
-	return Settings().Save()
+
+	return st.Save()
 }
 
 func defaultWS() string {
