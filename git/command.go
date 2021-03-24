@@ -1,15 +1,17 @@
 package git
 
 import (
-	"errors"
 	"gpics/config"
 	"os/exec"
 )
 
-func runGitCommand(name string, arg ...string) (string, error) {
-	dir := config.CmdDir
+func runGitCommand(dir string, name string, arg ...string) (string, error) {
 	if dir == "" {
-		return "", errors.New("cmd dir is error")
+		ws, err := config.Workspaces()
+		if err != nil {
+			return "", err
+		}
+		dir = ws
 	}
 
 	cmd := exec.Command(name, arg...)
@@ -18,18 +20,18 @@ func runGitCommand(name string, arg ...string) (string, error) {
 	return string(msg), err
 }
 
-func Pull(branch string) (string, error) {
-	return runGitCommand("git", "pull", "origin", branch)
+func Pull(dir string, branch string) (string, error) {
+	return runGitCommand(dir, "git", "pull", "origin", branch)
 }
 
-func Push(branch string) (string, error) {
-	return runGitCommand("git", "push", "origin", branch)
+func Push(dir string, branch string) (string, error) {
+	return runGitCommand(dir, "git", "push", "origin", branch)
 }
 
-func Clone(url string) (string, error) {
-	return runGitCommand("git", "clone", url)
+func Clone(dir string, url string) (string, error) {
+	return runGitCommand(dir, "git", "clone", url)
 }
 
 func Version() (string, error) {
-	return runGitCommand("git", "version")
+	return runGitCommand("", "git", "version")
 }
