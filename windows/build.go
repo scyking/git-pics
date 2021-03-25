@@ -37,7 +37,7 @@ func Build() (*walk.MainWindow, error) {
 	if err := (MainWindow{
 		AssignTo: &mw.MainWindow,
 		Title:    config.PName,
-		MinSize:  Size{600, 400},
+		MinSize:  Size{800, 495},
 		Layout:   HBox{MarginsZero: true},
 		DataBinder: DataBinder{
 			AutoSubmit: true,
@@ -219,9 +219,6 @@ func Build() (*walk.MainWindow, error) {
 		return nil, err
 	}
 
-	if err := vs.SetFixed(sv, true); err != nil {
-		return nil, err
-	}
 	return mw.MainWindow, nil
 }
 
