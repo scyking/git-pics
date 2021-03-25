@@ -2,7 +2,7 @@ package windows
 
 import (
 	"errors"
-	"gpics/files"
+	"gpics/base"
 	"log"
 )
 
@@ -16,7 +16,7 @@ func (mw *MyMainWindow) addImageViewWidgets(parent walk.Container) {
 
 	path := walk.Resources.RootDirPath()
 
-	names, err := files.ImageFileNames(path)
+	names, err := base.ImageFileNames(path)
 
 	if err != nil {
 		mw.errMBox(err)
@@ -61,9 +61,9 @@ func (mw *MyMainWindow) addImageView(name string, parent walk.Container) ImageVi
 				}
 				civ.SetBackground(brush)
 
-				textType := parent.DataBinder().DataSource().(map[string]int)[DBTextType]
+				textType := parent.DataBinder().DataSource().(map[string]int)[base.DBTextType]
 
-				if err := Copy(civ.Name(), textType); err != nil {
+				if err := base.Copy(civ.Name(), textType); err != nil {
 					mw.errMBox(err)
 				}
 
@@ -91,5 +91,5 @@ func (mw *MyMainWindow) openImage() (string, error) {
 		return "", errors.New("未选择文件")
 	}
 
-	return files.CopyFile(dlg.FilePath, rootPath)
+	return base.CopyFile(dlg.FilePath, rootPath)
 }

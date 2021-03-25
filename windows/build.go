@@ -1,8 +1,8 @@
 package windows
 
 import (
+	"gpics/base"
 	"gpics/config"
-	"gpics/files"
 	"log"
 )
 
@@ -15,7 +15,7 @@ var mw = new(MyMainWindow)
 
 func init() {
 	db := make(map[string]int)
-	db[DBTextType] = FilePath
+	db[base.DBTextType] = base.FilePath
 	mw.DBSource = db
 }
 
@@ -43,7 +43,7 @@ func Build() (*walk.MainWindow, error) {
 		OnDropFiles: func(fps []string) {
 			rootPath := walk.Resources.RootDirPath()
 			for _, fp := range fps {
-				name, err := files.CopyFile(fp, rootPath)
+				name, err := base.CopyFile(fp, rootPath)
 				if err != nil {
 					mw.errMBox(err)
 					return
@@ -135,8 +135,7 @@ func Build() (*walk.MainWindow, error) {
 						Model:    treeModel,
 						OnCurrentItemChanged: func() {
 
-							dir := tv.CurrentItem().(*Directory)
-							path := dir.Path()
+							path := tv.CurrentItem().(*Directory).Path()
 
 							if err := le.SetText(path); err != nil {
 								mw.errMBox(err)
@@ -146,7 +145,6 @@ func Build() (*walk.MainWindow, error) {
 							if err := walk.Resources.SetRootDirPath(path); err != nil {
 								mw.errMBox(err)
 							}
-
 							ClearWidgets(sv)
 							mw.addImageViewWidgets(sv)
 						},
@@ -158,30 +156,30 @@ func Build() (*walk.MainWindow, error) {
 							HSplitter{
 								Children: []Widget{
 									RadioButtonGroup{
-										DataMember: DBTextType,
+										DataMember: base.DBTextType,
 										Buttons: []RadioButton{
 											{
 												Name:      "'Markdown' Text",
 												Text:      "Markdown",
-												Value:     Markdown,
+												Value:     base.Markdown,
 												OnClicked: mw.clickRadio,
 											},
 											{
 												Name:      "'HTML' Text",
 												Text:      "HTML",
-												Value:     HTML,
+												Value:     base.HTML,
 												OnClicked: mw.clickRadio,
 											},
 											{
 												Name:      "'URL' Text",
 												Text:      "URL",
-												Value:     URL,
+												Value:     base.URL,
 												OnClicked: mw.clickRadio,
 											},
 											{
 												Name:      "'FilePath' Text",
 												Text:      "FilePath",
-												Value:     FilePath,
+												Value:     base.FilePath,
 												OnClicked: mw.clickRadio,
 											},
 										},
@@ -191,7 +189,6 @@ func Build() (*walk.MainWindow, error) {
 							LineEdit{
 								AssignTo: &le,
 								ReadOnly: true,
-								Text:     "test",
 							},
 							ScrollView{
 								AssignTo:      &sv,
@@ -246,7 +243,13 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 						Text: "Workspace:",
 					},
 					LineEdit{
-						Text: Bind("Workspace"),
+						ReadOnly: true,
+						Text:     Bind("Workspace"),
+						OnMouseDown: func(x, y int, button walk.MouseButton) {
+							if button == walk.LeftButton {
+								// todo 打开文件夹
+							}
+						},
 					},
 				},
 			},
