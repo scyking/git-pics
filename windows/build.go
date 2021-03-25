@@ -132,12 +132,19 @@ func Build() (*walk.MainWindow, error) {
 						AssignTo: &tv,
 						Model:    treeModel,
 						OnCurrentItemChanged: func() {
+
 							dir := tv.CurrentItem().(*Directory)
-							log.Println("path now :", dir.Path())
-							if err := le.SetText(dir.Path()); err != nil {
+							path := dir.Path()
+
+							if err := le.SetText(path); err != nil {
 								mw.errMBox(err)
 								return
 							}
+
+							if err := walk.Resources.SetRootDirPath(path); err != nil {
+								mw.errMBox(err)
+							}
+
 							ClearWidgets(sv)
 							mw.addImageViewWidgets(dir.Path(), sv)
 						},

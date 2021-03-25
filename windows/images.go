@@ -14,10 +14,6 @@ import (
 // 将路径中图片做为ImageView组件添加到容器中
 func (mw *MyMainWindow) addImageViewWidgets(path string, parent walk.Container) {
 
-	if err := walk.Resources.SetRootDirPath(path); err != nil {
-		mw.errMBox(err)
-	}
-
 	names, err := files.ImageFileNames(path)
 
 	if err != nil {
