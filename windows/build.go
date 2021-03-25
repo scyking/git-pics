@@ -26,6 +26,8 @@ func Build() (*walk.MainWindow, error) {
 	var sv *walk.ScrollView
 	var le *walk.LineEdit
 
+	ics := tbIcons()
+
 	treeModel, err := NewDirectoryTreeModel()
 	if err != nil {
 		return nil, err
@@ -52,23 +54,26 @@ func Build() (*walk.MainWindow, error) {
 			}
 		},
 		ToolBar: ToolBar{
-			Font:        Font{PointSize: 15},
-			ButtonStyle: ToolBarButtonTextOnly,
+			ButtonStyle: ToolBarButtonImageBeforeText,
 			Items: []MenuItem{
 				Action{
-					Text: "Clone",
+					Image: ics[0],
+					Text:  "Clone",
 				},
 				Separator{},
 				Action{
-					Text: "Pull",
+					Image: ics[1],
+					Text:  "Pull",
 				},
 				Separator{},
 				Action{
-					Text: "Push",
+					Image: ics[2],
+					Text:  "Push",
 				},
 				Separator{},
 				Action{
-					Text: "添加图片",
+					Image: ics[3],
+					Text:  "添加图片",
 					OnTriggered: func() {
 						name, err := mw.openImage()
 						if err != nil {
@@ -80,11 +85,13 @@ func Build() (*walk.MainWindow, error) {
 				},
 				Separator{},
 				Action{
-					Text: "屏幕截图",
+					Image: ics[4],
+					Text:  "截图",
 				},
 				Separator{},
 				Action{
-					Text: "配置",
+					Image: ics[5],
+					Text:  "配置",
 					OnTriggered: func() {
 						cf := new(config.Config)
 						ws, err := config.Workspaces()
@@ -223,6 +230,8 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 	var db *walk.DataBinder
 	var acceptPB, cancelPB *walk.PushButton
 
+	ic := shell32Icon(4)
+
 	return Dialog{
 		AssignTo:      &dlg,
 		Title:         "配置",
@@ -248,8 +257,9 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 						ReadOnly: true,
 						Text:     Bind("Workspace"),
 					},
-					PushButton{
-						Text: "选择",
+					ToolButton{
+						Name:  "选择",
+						Image: ic,
 						OnClicked: func() {
 							ws, err := mw.openDir()
 							if ws == "" {
@@ -293,4 +303,26 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 			},
 		},
 	}.Run(owner)
+}
+
+func tbIcons() []*walk.Icon {
+
+	ics := []*walk.Icon{
+		shell32Icon(149), //clone
+		shell32Icon(46),  //pull
+		shell32Icon(146), //push
+		shell32Icon(36),  //添加图片
+		shell32Icon(34),  //截图
+		shell32Icon(69)}  //配置
+
+	return ics
+}
+
+func shell32Icon(index int) *walk.Icon {
+
+	ic, err := walk.NewIconFromSysDLL("shell32", index)
+	if err != nil {
+		log.Println(err)
+	}
+	return ic
 }
