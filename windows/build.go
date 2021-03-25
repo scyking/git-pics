@@ -231,7 +231,7 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 	var db *walk.DataBinder
 	var acceptPB, cancelPB *walk.PushButton
 
-	ic := shell32Icon(4)
+	ic := img.Shell32Icon(4)
 
 	return Dialog{
 		AssignTo:      &dlg,
