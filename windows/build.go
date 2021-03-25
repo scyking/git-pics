@@ -115,6 +115,8 @@ func Build() (*walk.MainWindow, error) {
 								mw.errMBox(err)
 							}
 
+							mw.ImageName = ""
+
 							if err := config.SaveConfig(cf); err != nil {
 								mw.errMBox(err)
 								return
@@ -146,7 +148,7 @@ func Build() (*walk.MainWindow, error) {
 							}
 
 							ClearWidgets(sv)
-							mw.addImageViewWidgets(dir.Path(), sv)
+							mw.addImageViewWidgets(sv)
 						},
 					},
 					VSplitter{

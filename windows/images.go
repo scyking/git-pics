@@ -12,7 +12,9 @@ import (
 )
 
 // 将路径中图片做为ImageView组件添加到容器中
-func (mw *MyMainWindow) addImageViewWidgets(path string, parent walk.Container) {
+func (mw *MyMainWindow) addImageViewWidgets(parent walk.Container) {
+
+	path := walk.Resources.RootDirPath()
 
 	names, err := files.ImageFileNames(path)
 
