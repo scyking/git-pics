@@ -38,7 +38,9 @@ func Build() (*walk.MainWindow, error) {
 		AssignTo: &mw.MainWindow,
 		Title:    config.PName,
 		MinSize:  Size{800, 495},
-		Layout:   HBox{MarginsZero: true},
+		Layout: HBox{
+			MarginsZero: true,
+		},
 		DataBinder: DataBinder{
 			AutoSubmit: true,
 			DataSource: mw.DBSource,
@@ -139,8 +141,9 @@ func Build() (*walk.MainWindow, error) {
 				AssignTo: &hs,
 				Children: []Widget{
 					TreeView{
-						AssignTo: &tv,
-						Model:    treeModel,
+						AssignTo:      &tv,
+						Model:         treeModel,
+						StretchFactor: 1,
 						OnCurrentItemChanged: func() {
 
 							path := tv.CurrentItem().(*Directory).Path()
@@ -159,7 +162,7 @@ func Build() (*walk.MainWindow, error) {
 					},
 					VSplitter{
 						AssignTo:      &vs,
-						StretchFactor: 5,
+						StretchFactor: 3,
 						Children: []Widget{
 							HSplitter{
 								Children: []Widget{
@@ -199,14 +202,13 @@ func Build() (*walk.MainWindow, error) {
 								ReadOnly: true,
 							},
 							ScrollView{
-								AssignTo:      &sv,
-								Name:          "Pictures",
-								VerticalFixed: true,
+								AssignTo: &sv,
+								Name:     "Pictures",
 								DataBinder: DataBinder{
 									DataSource: mw.DBSource,
 								},
 								Layout: Flow{
-									Alignment: AlignHNearVCenter,
+									Alignment: AlignHNearVNear,
 								},
 								Children: []Widget{},
 							},
@@ -241,7 +243,7 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 			DataSource:     cf,
 			ErrorPresenter: ToolTipErrorPresenter{},
 		},
-		MinSize: Size{300, 300},
+		MinSize: Size{324, 200},
 		Layout:  VBox{},
 		Children: []Widget{
 			Composite{
