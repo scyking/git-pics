@@ -102,10 +102,16 @@ func Build() (*walk.MainWindow, error) {
 						}
 
 						if cmd == walk.DlgCmdOK {
-							model := new(DirectoryTreeModel)
-							model.roots = append(model.roots, NewDirectory(ws, nil))
+							log.Println("重置tree view root：", cf.Workspace)
+							model := tv.Model().(*DirectoryTreeModel)
+							root := NewDirectory(cf.Workspace, nil)
+							model.roots = []*Directory{root}
 
 							if err := tv.SetModel(model); err != nil {
+								mw.errMBox(err)
+							}
+
+							if err := tv.SetCurrentItem(root); err != nil {
 								mw.errMBox(err)
 							}
 
