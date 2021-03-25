@@ -81,7 +81,7 @@ func (mw *MyMainWindow) openImage() (string, error) {
 
 	//dlg.FilePath = rootPath
 	dlg.Filter = "Image Files (*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff)|*.emf;*.bmp;*.exif;*.gif;*.jpeg;*.jpg;*.png;*.tiff"
-	dlg.Title = "Select an Image"
+	dlg.Title = "添加图片"
 
 	ok, err := dlg.ShowOpen(mw)
 	if err != nil {

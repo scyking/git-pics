@@ -219,6 +219,7 @@ func Build() (*walk.MainWindow, error) {
 
 func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 	var dlg *walk.Dialog
+	var le *walk.LineEdit
 	var db *walk.DataBinder
 	var acceptPB, cancelPB *walk.PushButton
 
@@ -237,17 +238,31 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 		Layout:  VBox{},
 		Children: []Widget{
 			Composite{
-				Layout: Grid{Columns: 2},
+				Layout: Grid{Columns: 3},
 				Children: []Widget{
 					Label{
 						Text: "Workspace:",
 					},
 					LineEdit{
+						AssignTo: &le,
 						ReadOnly: true,
 						Text:     Bind("Workspace"),
-						OnMouseDown: func(x, y int, button walk.MouseButton) {
-							if button == walk.LeftButton {
-								// todo 打开文件夹
+					},
+					PushButton{
+						Text: "选择",
+						OnClicked: func() {
+							ws, err := mw.openDir()
+							if ws == "" {
+								return
+							}
+
+							if err != nil {
+								mw.errMBox(err)
+							}
+
+							if err := le.SetText(ws); err != nil {
+								mw.errMBox(err)
+								return
 							}
 						},
 					},

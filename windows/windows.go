@@ -2,6 +2,7 @@ package windows
 
 import (
 	"gpics/base"
+	"gpics/config"
 	"log"
 )
 
@@ -26,4 +27,29 @@ func (mw *MyMainWindow) clickRadio() {
 			log.Fatal(err)
 		}
 	}
+}
+
+func (mw *MyMainWindow) openDir() (string, error) {
+	dlg := new(walk.FileDialog)
+
+	ws, err := config.Workspaces()
+	if err != nil {
+		return "", err
+	}
+	log.Println("当前工作空间", ws)
+
+	dlg.FilePath = ws
+	dlg.Title = "选择工作空间"
+
+	ok, err := dlg.ShowBrowseFolder(mw)
+
+	if err != nil {
+		return "", err
+	}
+
+	if !ok {
+		return "", err
+	}
+
+	return dlg.FilePath, nil
 }
