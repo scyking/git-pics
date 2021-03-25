@@ -3,6 +3,7 @@ package windows
 import (
 	"gpics/base"
 	"gpics/config"
+	"gpics/img"
 	"log"
 )
 
@@ -308,21 +309,12 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 func tbIcons() []*walk.Icon {
 
 	ics := []*walk.Icon{
-		shell32Icon(149), //clone
-		shell32Icon(46),  //pull
-		shell32Icon(146), //push
-		shell32Icon(36),  //添加图片
-		shell32Icon(34),  //截图
-		shell32Icon(69)}  //配置
+		img.Shell32Icon(149), //clone
+		img.Shell32Icon(46),  //pull
+		img.Shell32Icon(146), //push
+		img.Shell32Icon(36),  //添加图片
+		img.Shell32Icon(34),  //截图
+		img.Shell32Icon(69)}  //配置
 
 	return ics
-}
-
-func shell32Icon(index int) *walk.Icon {
-
-	ic, err := walk.NewIconFromSysDLL("shell32", index)
-	if err != nil {
-		log.Println(err)
-	}
-	return ic
 }
