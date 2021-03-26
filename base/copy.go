@@ -69,6 +69,13 @@ func filePath(name string, rootPath string) (string, error) {
 
 func pathByTextType(name string, textType int) (string, error) {
 	rootPath := walk.Resources.RootDirPath()
+	ws, err := config.Workspaces()
+	if err != nil {
+		return "", err
+	}
+	if ws == rootPath {
+		return "", errors.New("图片无法应用")
+	}
 	if rootPath == "" {
 		return "", errors.New("copy: get 'root dir path' failed")
 	}
