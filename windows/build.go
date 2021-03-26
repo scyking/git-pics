@@ -83,6 +83,9 @@ func Build() (*walk.MainWindow, error) {
 							mw.errMBox(err)
 							return
 						}
+						if name == "" {
+							return
+						}
 						mw.addImageViewWidget(name, sv)
 					},
 				},

@@ -1,7 +1,6 @@
 package windows
 
 import (
-	"errors"
 	"gpics/base"
 	"log"
 )
@@ -88,7 +87,7 @@ func (mw *MyMainWindow) openImage() (string, error) {
 		return "", err
 	}
 	if !ok {
-		return "", errors.New("未选择文件")
+		return "", nil
 	}
 
 	return base.CopyFile(dlg.FilePath, rootPath)
