@@ -128,7 +128,14 @@ func Build() (*walk.MainWindow, error) {
 						}
 
 						if cmd == walk.DlgCmdOK {
-							log.Println("重置tree view root：", cf.Workspace)
+
+							if err := config.SaveConfig(cf); err != nil {
+								mw.errMBox(err)
+								return
+							}
+
+							mw.ImageName = ""
+
 							model := tv.Model().(*DirectoryTreeModel)
 							root := NewDirectory(cf.Workspace, nil)
 							model.roots = []*Directory{root}
@@ -139,13 +146,6 @@ func Build() (*walk.MainWindow, error) {
 							}
 
 							if err := tv.SetCurrentItem(root); err != nil {
-								mw.errMBox(err)
-								return
-							}
-
-							mw.ImageName = ""
-
-							if err := config.SaveConfig(cf); err != nil {
 								mw.errMBox(err)
 								return
 							}
