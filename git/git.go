@@ -54,3 +54,7 @@ func Push() error {
 
 	return push(dir)
 }
+
+func Version() error {
+	return version("")
+}

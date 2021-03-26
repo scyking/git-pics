@@ -15,27 +15,31 @@ import (
 
 var mw = new(MyMainWindow)
 
+var ics []*walk.Icon
+var treeModel *DirectoryTreeModel
+
 func init() {
 	db := make(map[string]int)
 	db[base.DBTextType] = base.FilePath
 	mw.DBSource = db
+
+	ics = tbIcons()
+
+	tm, err := NewDirectoryTreeModel()
+	if err != nil {
+		log.Fatal(err)
+	}
+	treeModel = tm
 }
 
-func Build() (*walk.MainWindow, error) {
+func Build() (*MyMainWindow, error) {
 	var tv *walk.TreeView
 	var hs *walk.Splitter
 	var vs *walk.Splitter
 	var sv *walk.ScrollView
 	var le *walk.LineEdit
 
-	ics := tbIcons()
-
-	treeModel, err := NewDirectoryTreeModel()
-	if err != nil {
-		return nil, err
-	}
-
-	if err := (MainWindow{
+	m := MainWindow{
 		AssignTo: &mw.MainWindow,
 		Title:    config.PName,
 		MinSize:  Size{800, 495},
@@ -236,11 +240,9 @@ func Build() (*walk.MainWindow, error) {
 				},
 			},
 		},
-	}.Create()); err != nil {
-		return nil, err
 	}
 
-	return mw.MainWindow, nil
+	return mw, m.Create()
 }
 
 func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
