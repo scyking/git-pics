@@ -103,8 +103,9 @@ func Build() (*walk.MainWindow, error) {
 				},
 				Separator{},
 				Action{
-					Image: ics[4],
-					Text:  "截图",
+					Image:   ics[4],
+					Enabled: false,
+					Text:    "截图",
 				},
 				Separator{},
 				Action{
