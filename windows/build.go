@@ -73,22 +73,10 @@ func Build() (*MyMainWindow, error) {
 				},
 				Separator{},
 				Action{
-					Image: ics[1],
-					Text:  "Pull",
-					OnTriggered: func() {
-						if err := git.Pull(); err != nil {
-							mw.errMBox(err)
-						}
-					},
-				},
-				Separator{},
-				Action{
 					Image: ics[2],
-					Text:  "Push",
+					Text:  "手动提交",
 					OnTriggered: func() {
-						if err := git.Push(); err != nil {
-							mw.errMBox(err)
-						}
+						go git.AutoCommit()
 					},
 				},
 				Separator{},

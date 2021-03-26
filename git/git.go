@@ -58,3 +58,13 @@ func Push() error {
 func Version() error {
 	return version("")
 }
+
+func AutoCommit() {
+	//添加自动提交标记 未释放不能重复提交
+	//判断不是工作空间根目录
+	//检查自动提交是否开启
+	//add .
+	//commit
+	//pull
+	//push
+}
