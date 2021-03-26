@@ -36,3 +36,9 @@ func TestSaveWorkspace(t *testing.T) {
 		log.Println(ws)
 	}
 }
+
+func TestSaveConfig(t *testing.T) {
+	cf := new(config.Config)
+	cf.Workspace = "C:\\Users\\xzc41\\go\\src\\gpics"
+	config.SaveConfig(cf)
+}

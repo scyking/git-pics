@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"github.com/lxn/walk"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -62,7 +63,16 @@ func Workspaces() (string, error) {
 }
 
 func SaveConfig(cf *Config) error {
-	// todo 检测ws正确性
+
+	dirs, err := ioutil.ReadDir(cf.Workspace)
+	if err != nil {
+		return nil
+	}
+
+	if len(dirs) > 0 {
+		return errors.New("请选择空文件夹作为工作空间")
+	}
+
 	st := Settings()
 
 	if err := st.Put(WorkspaceKey, cf.Workspace); err != nil {
