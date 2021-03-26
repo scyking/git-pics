@@ -1,27 +1,26 @@
-package git_test
+package git
 
 import (
-	"gpics/git"
 	"log"
 	"testing"
 )
 
 func TestVersion(t *testing.T) {
-	msg, err := git.Version()
-	log.Println("version test：", msg, err)
+	err := version("")
+	log.Println(err)
 }
 
 func TestClone(t *testing.T) {
-	msg, err := git.Clone("https://github.com/scyking/my-pics.git")
-	log.Println("clone test：", msg, err)
+	err := clone("", "")
+	log.Println("clone test：", err)
 }
 
 func TestPush(t *testing.T) {
-	msg, err := git.Push("master")
-	log.Println("push test：", msg, err)
+	err := Push()
+	log.Println("push test：", err)
 }
 
 func TestPull(t *testing.T) {
-	msg, err := git.Pull("master")
-	log.Println("pull test：", msg, err)
+	err := Pull()
+	log.Println("pull test：", err)
 }

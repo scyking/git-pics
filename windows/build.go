@@ -3,6 +3,7 @@ package windows
 import (
 	"gpics/base"
 	"gpics/config"
+	"gpics/git"
 	"gpics/img"
 	"log"
 )
@@ -51,9 +52,9 @@ func Build() (*walk.MainWindow, error) {
 				name, err := base.CopyFile(fp, rootPath)
 				if err != nil {
 					mw.errMBox(err)
-					return
+				} else {
+					mw.addImageViewWidget(name, sv)
 				}
-				mw.addImageViewWidget(name, sv)
 			}
 		},
 		ToolBar: ToolBar{
@@ -62,16 +63,29 @@ func Build() (*walk.MainWindow, error) {
 				Action{
 					Image: ics[0],
 					Text:  "Clone",
+					OnTriggered: func() {
+						//todo
+					},
 				},
 				Separator{},
 				Action{
 					Image: ics[1],
 					Text:  "Pull",
+					OnTriggered: func() {
+						if err := git.Pull(); err != nil {
+							mw.errMBox(err)
+						}
+					},
 				},
 				Separator{},
 				Action{
 					Image: ics[2],
 					Text:  "Push",
+					OnTriggered: func() {
+						if err := git.Push(); err != nil {
+							mw.errMBox(err)
+						}
+					},
 				},
 				Separator{},
 				Action{
@@ -81,12 +95,10 @@ func Build() (*walk.MainWindow, error) {
 						name, err := mw.openImage()
 						if err != nil {
 							mw.errMBox(err)
-							return
 						}
-						if name == "" {
-							return
+						if name != "" {
+							mw.addImageViewWidget(name, sv)
 						}
-						mw.addImageViewWidget(name, sv)
 					},
 				},
 				Separator{},
@@ -112,6 +124,7 @@ func Build() (*walk.MainWindow, error) {
 						cmd, err := RunConfigDialog(mw, cf)
 						if err != nil {
 							mw.errMBox(err)
+							return
 						}
 
 						if cmd == walk.DlgCmdOK {
@@ -122,10 +135,12 @@ func Build() (*walk.MainWindow, error) {
 
 							if err := tv.SetModel(model); err != nil {
 								mw.errMBox(err)
+								return
 							}
 
 							if err := tv.SetCurrentItem(root); err != nil {
 								mw.errMBox(err)
+								return
 							}
 
 							mw.ImageName = ""

@@ -1,37 +1,40 @@
 package git
 
 import (
-	"gpics/config"
 	"os/exec"
 )
 
-func runGitCommand(dir string, name string, arg ...string) (string, error) {
-	if dir == "" {
-		ws, err := config.Workspaces()
-		if err != nil {
-			return "", err
-		}
-		dir = ws
-	}
+func runGitCommand(dir string, name string, arg ...string) error {
 
 	cmd := exec.Command(name, arg...)
 	cmd.Dir = dir
-	msg, err := cmd.CombinedOutput()
-	return string(msg), err
+
+	return cmd.Run()
 }
 
-func Pull(dir string, branch string) (string, error) {
-	return runGitCommand(dir, "git", "pull", "origin", branch)
+func outGitCommand(dir string, name string, arg ...string) (string, error) {
+	cmd := exec.Command(name, arg...)
+	cmd.Dir = dir
+	b, err := cmd.Output()
+	return string(b), err
 }
 
-func Push(dir string, branch string) (string, error) {
-	return runGitCommand(dir, "git", "push", "origin", branch)
+func pull(dir string) error {
+	return runGitCommand(dir, "git", "pull")
 }
 
-func Clone(dir string, url string) (string, error) {
+func push(dir string) error {
+	return runGitCommand(dir, "git", "push")
+}
+
+func clone(dir string, url string) error {
 	return runGitCommand(dir, "git", "clone", url)
 }
 
-func Version() (string, error) {
-	return runGitCommand("", "git", "version")
+func version(dir string) error {
+	return runGitCommand(dir, "git", "version")
+}
+
+func remote(dir string) (string, error) {
+	return outGitCommand(dir, "git", "remote", "-v")
 }
