@@ -49,7 +49,7 @@ func url(name string, rootPath string) (string, error) {
 	gl, err := git.UrlStr(rootPath)
 
 	if err != nil {
-		return "", err
+		return "", errors.New("git 命令执行错误")
 	}
 
 	// 获取资源地址相对工作空间地址的绝对地址

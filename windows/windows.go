@@ -24,7 +24,7 @@ func (mw *MyMainWindow) clickRadio() {
 	log.Println("textType:", mw.DBSource[base.DBTextType])
 	if mw.ImageName != "" {
 		if err := base.Copy(mw.ImageName, mw.DBSource[base.DBTextType]); err != nil {
-			log.Fatal(err)
+			mw.errMBox(err)
 		}
 	}
 }
