@@ -8,6 +8,7 @@ import (
 	"gpics/git"
 	"log"
 	"path/filepath"
+	"strings"
 )
 
 const DBTextType = "tt"
@@ -44,17 +45,21 @@ func url(name string, rootPath string) (string, error) {
 	}
 	abs := filepath.Join(rootPath, name)
 
+	// 获取去掉后缀的git url
+	gl, err := git.UrlStr(rootPath)
+
+	if err != nil {
+		return "", err
+	}
+
+	// 获取资源地址相对工作空间地址的绝对地址
 	rel, err := filepath.Rel(workspace, abs)
 	if err != nil {
 		return "", err
 	}
 
-	gitPath, err := git.GitPath(rootPath)
-	if err != nil {
-		return "", err
-	}
+	url := gl + strings.ReplaceAll(rel, "\\", "/")
 
-	url := git.HTTPS + filepath.Join(gitPath, rel)
 	return url, nil
 }
 
