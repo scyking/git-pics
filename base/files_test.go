@@ -7,7 +7,7 @@ import (
 )
 
 func TestDirFiles(t *testing.T) {
-	names, err := base.ImageFileNames("C:\\workspace\\test")
+	names, err := base.ImageFileNames("")
 	if err != nil {
 		log.Println(err)
 	}
@@ -16,7 +16,7 @@ func TestDirFiles(t *testing.T) {
 }
 
 func TestCopyFile(t *testing.T) {
-	if _, err := base.CopyFile("C:\\workspace\\test\\test.png", "C:\\workspace\\test"); err != nil {
+	if _, err := base.CopyFile("", ""); err != nil {
 		log.Println(err)
 	}
 }
