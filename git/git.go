@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"strings"
 	"sync"
-	"time"
 )
 
 var mu = new(sync.Mutex)
@@ -72,6 +71,7 @@ func AutoCommit() (e error) {
 	if err := commit(dir, "添加图片"); err != nil {
 		return err
 	}
+
 	go remoteCommit(mu)
 	return nil
 }
@@ -81,7 +81,6 @@ func remoteCommit(mu *sync.Mutex) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	time.Sleep(5 * 1e9)
 	if err := Pull(); err != nil {
 		log.Println("pull err:", err)
 		return
