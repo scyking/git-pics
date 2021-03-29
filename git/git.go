@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"time"
 )
 
 var mu = new(sync.Mutex)
@@ -75,18 +76,19 @@ func AutoCommit() (e error) {
 	return nil
 }
 
-// 因网络等原因 很容易失败
+// 因网络等原因 很容易超时失败
 func remoteCommit(mu *sync.Mutex) {
 	mu.Lock()
 	defer mu.Unlock()
 
+	time.Sleep(5 * 1e9)
 	if err := Pull(); err != nil {
-		//todo
-		log.Println("err")
+		log.Println("pull err:", err)
+		return
 	}
 	if err := Push(); err != nil {
-		//todo
-		log.Println("err")
+		log.Println("push err:", err)
+		return
 	}
 	log.Println("提交 成功")
 }

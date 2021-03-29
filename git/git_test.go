@@ -20,5 +20,10 @@ func TestAutoCommit(t *testing.T) {
 	if err := git.AutoCommit(); err != nil {
 		log.Println("err:", err)
 	}
-
+	if err := git.AutoCommit(); err != nil {
+		log.Println("err:", err)
+	}
+	if err := git.AutoCommit(); err != nil {
+		log.Println("err:", err)
+	}
 }
