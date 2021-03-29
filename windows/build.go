@@ -58,6 +58,7 @@ func Build() (*MyMainWindow, error) {
 					mw.errMBox(err)
 				} else {
 					mw.addImageViewWidget(name, sv)
+					git.AutoCommit()
 				}
 			}
 		},
@@ -76,7 +77,7 @@ func Build() (*MyMainWindow, error) {
 					Image: ics[2],
 					Text:  "手动提交",
 					OnTriggered: func() {
-						go git.AutoCommit()
+						git.AutoCommit()
 					},
 				},
 				Separator{},
@@ -90,6 +91,7 @@ func Build() (*MyMainWindow, error) {
 						}
 						if name != "" {
 							mw.addImageViewWidget(name, sv)
+							git.AutoCommit()
 						}
 					},
 				},

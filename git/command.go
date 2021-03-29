@@ -19,6 +19,10 @@ func outGitCommand(dir string, name string, arg ...string) (string, error) {
 	return string(b), err
 }
 
+func ()  {
+	
+}
+
 func pull(dir string) error {
 	return runGitCommand(dir, "git", "pull")
 }
