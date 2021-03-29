@@ -16,11 +16,21 @@ func TestClone(t *testing.T) {
 }
 
 func TestPush(t *testing.T) {
-	err := Push()
+	err := push("")
 	log.Println("push test：", err)
 }
 
 func TestPull(t *testing.T) {
-	err := Pull()
+	err := pull("")
 	log.Println("pull test：", err)
+}
+
+func TestAdd(t *testing.T) {
+	err := add("", ".")
+	log.Println(err)
+}
+
+func TestCommit(t *testing.T) {
+	err := commit("", "test")
+	log.Println(err)
 }
