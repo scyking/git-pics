@@ -4,9 +4,13 @@ import (
 	"errors"
 	"github.com/lxn/walk"
 	"gpics/config"
+	"log"
 	"net/url"
 	"strings"
+	"sync"
 )
+
+var mu = new(sync.Mutex)
 
 // 获取git url
 func Url(dir string) (*url.URL, error) {
@@ -59,12 +63,30 @@ func Version() error {
 	return version("")
 }
 
-func AutoCommit() {
-	//添加自动提交标记 未释放不能重复提交
-	//判断不是工作空间根目录
-	//检查自动提交是否开启
-	//add .
-	//commit
-	//pull
-	//push
+func AutoCommit() (e error) {
+	dir := walk.Resources.RootDirPath()
+	if err := add(dir, "."); err != nil {
+		return err
+	}
+	if err := commit(dir, "添加图片"); err != nil {
+		return err
+	}
+	go remoteCommit(mu)
+	return nil
+}
+
+// 因网络等原因 很容易失败
+func remoteCommit(mu *sync.Mutex) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	if err := Pull(); err != nil {
+		//todo
+		log.Println("err")
+	}
+	if err := Push(); err != nil {
+		//todo
+		log.Println("err")
+	}
+	log.Println("提交 成功")
 }

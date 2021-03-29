@@ -15,3 +15,10 @@ func TestUrlStr(t *testing.T) {
 	url, err := git.UrlStr("")
 	log.Println(url, err)
 }
+
+func TestAutoCommit(t *testing.T) {
+	if err := git.AutoCommit(); err != nil {
+		log.Println("err:", err)
+	}
+
+}
