@@ -20,7 +20,8 @@ const (
 )
 
 type Config struct {
-	Workspace string
+	Workspace  string
+	AutoCommit bool
 }
 
 func init() {
