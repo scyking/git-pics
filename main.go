@@ -12,12 +12,14 @@ func main() {
 		log.Fatal("请检查git是否正确安装")
 	}
 
-	mw, err := windows.Build()
+	mw := windows.Build()
 
-	if err != nil {
+	if err := mw.Create(); err != nil {
 		log.Fatal(err)
 	}
 
-	mw.Run()
+	if _, err := mw.Run(); err != nil {
+		log.Fatal(err)
+	}
 
 }

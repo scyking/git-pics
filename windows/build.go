@@ -15,28 +15,23 @@ import (
 
 var mw = new(MyMainWindow)
 
-var ics []*walk.Icon
-var treeModel *DirectoryTreeModel
-
 func init() {
 	db := make(map[string]int)
 	db[base.DBTextType] = base.FilePath
 	mw.DBSource = db
+}
 
-	ics = tbIcons()
+func Build() MainWindow {
+
+	ics := tbIcons()
 
 	tm, err := NewDirectoryTreeModel()
 	if err != nil {
 		log.Fatal(err)
 	}
-	treeModel = tm
-}
+	treeModel := tm
 
-func Build() (*MyMainWindow, error) {
-	var sv *walk.ScrollView
-	var le *walk.LineEdit
-
-	m := MainWindow{
+	return MainWindow{
 		AssignTo: &mw.MainWindow,
 		Title:    config.PName,
 		MinSize:  Size{800, 495},
@@ -93,7 +88,6 @@ func Build() (*MyMainWindow, error) {
 						OnCurrentItemChanged: mw.tv.itemChanged,
 					},
 					VSplitter{
-						AssignTo:      &mw.vs,
 						StretchFactor: 3,
 						Children: []Widget{
 							HSplitter{
@@ -130,11 +124,11 @@ func Build() (*MyMainWindow, error) {
 								},
 							},
 							LineEdit{
-								AssignTo: &le,
+								AssignTo: &mw.le,
 								ReadOnly: true,
 							},
 							ScrollView{
-								AssignTo: &sv,
+								AssignTo: &mw.sv,
 								Name:     "Pictures",
 								DataBinder: DataBinder{
 									DataSource: mw.DBSource,
@@ -150,8 +144,6 @@ func Build() (*MyMainWindow, error) {
 			},
 		},
 	}
-
-	return mw, m.Create()
 }
 
 func RunCloneDialog(owner walk.Form, u *string) (int, error) {

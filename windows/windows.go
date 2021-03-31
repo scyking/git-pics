@@ -15,7 +15,8 @@ import (
 type MyMainWindow struct {
 	*walk.MainWindow
 	tv        *MyTreeView
-	vs        *walk.Splitter
+	sv        *walk.ScrollView
+	le        *walk.LineEdit
 	ImageName string
 	DBSource  map[string]int
 }
