@@ -96,8 +96,8 @@ func Build() MainWindow {
 						AssignTo:             &mw.tv.TreeView,
 						Model:                treeModel,
 						StretchFactor:        1,
-						OnMouseDown:          mw.tv.rightClick,
-						OnCurrentItemChanged: mw.tv.itemChanged,
+						OnMouseDown:          mw.rightClick,
+						OnCurrentItemChanged: mw.itemChanged,
 					},
 					VSplitter{
 						StretchFactor: 3,

@@ -18,8 +18,8 @@ func (tv *MyTreeView) AddItem(name string, parent *Directory) {
 	model.PublishItemsReset(parent)
 }
 
-func (tv *MyTreeView) itemChanged() {
-	path := tv.CurrentItem().(*Directory).Path()
+func (mw *MyMainWindow) itemChanged() {
+	path := mw.tv.CurrentItem().(*Directory).Path()
 
 	if err := walk.Resources.SetRootDirPath(path); err != nil {
 		mw.errMBox(err)
@@ -34,11 +34,11 @@ func (tv *MyTreeView) itemChanged() {
 	mw.addImageViewWidgets(mw.sv)
 }
 
-func (tv *MyTreeView) rightClick(x, y int, button walk.MouseButton) {
+func (mw *MyMainWindow) rightClick(x, y int, button walk.MouseButton) {
 	if button != walk.RightButton {
 		return
 	}
-	item := tv.ItemAt(x, y)
+	item := mw.tv.ItemAt(x, y)
 	if item == nil {
 		return
 	}
