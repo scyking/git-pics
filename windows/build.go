@@ -6,6 +6,7 @@ import (
 	"gpics/git"
 	"gpics/img"
 	"log"
+	"path/filepath"
 )
 
 import (
@@ -71,7 +72,46 @@ func Build() (*MyMainWindow, error) {
 					Image: ics[0],
 					Text:  "Clone",
 					OnTriggered: func() {
-						//todo
+						var url string
+
+						cmd, err := RunCloneDialog(mw, &url)
+
+						if err != nil {
+							mw.errMBox(err)
+							return
+						}
+
+						if cmd == walk.DlgCmdOK {
+							log.Println("URL:", url)
+
+							if err := git.Clone(url); err != nil {
+								mw.errMBox(err)
+								return
+							}
+
+							name, err := git.RepName(url)
+							if err != nil {
+								mw.errMBox(err)
+								return
+							}
+
+							model := tv.Model().(*DirectoryTreeModel)
+							for _, d := range model.roots {
+								ws, err := config.Workspaces()
+								if err != nil {
+									mw.errMBox(err)
+									return
+								}
+
+								if ws == d.Path() {
+									filepath.Join(ws, name)
+									nd := NewDirectory(ws, d)
+									model.roots = append(model.roots, nd)
+									model.PublishItemsReset(d)
+								}
+							}
+
+						}
 					},
 				},
 				Separator{},
@@ -239,6 +279,58 @@ func Build() (*MyMainWindow, error) {
 	}
 
 	return mw, m.Create()
+}
+
+func RunCloneDialog(owner walk.Form, url *string) (int, error) {
+	var dlg *walk.Dialog
+	var le *walk.LineEdit
+
+	var acceptPB, cancelPB *walk.PushButton
+
+	return Dialog{
+		AssignTo:      &dlg,
+		Title:         "Clone",
+		DefaultButton: &acceptPB,
+		CancelButton:  &cancelPB,
+		MinSize:       Size{324, 200},
+		Layout:        VBox{},
+		Children: []Widget{
+			Composite{
+				Layout: Grid{Columns: 3},
+				Children: []Widget{
+					Label{
+						Text: "URL:",
+					},
+					LineEdit{
+						AssignTo: &le,
+					},
+					PushButton{
+						Text: "Test",
+					},
+				},
+			},
+			Composite{
+				Layout: HBox{},
+				Children: []Widget{
+					HSpacer{},
+					PushButton{
+						AssignTo: &acceptPB,
+						Text:     "OK",
+						OnClicked: func() {
+							*url = le.Text()
+							dlg.Accept()
+						},
+					},
+					PushButton{
+						AssignTo:  &cancelPB,
+						Text:      "Cancel",
+						OnClicked: func() { dlg.Cancel() },
+					},
+				},
+			},
+		},
+	}.Run(owner)
+
 }
 
 func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {

@@ -27,3 +27,8 @@ func TestAutoCommit(t *testing.T) {
 		log.Println("err:", err)
 	}
 }
+
+func TestRepName(t *testing.T) {
+	name, err := git.RepName("https://github.com/scyking/test.git")
+	log.Println(name, err)
+}
