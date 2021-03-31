@@ -7,7 +7,6 @@ import (
 	"gpics/img"
 	"log"
 	"net/url"
-	"path/filepath"
 )
 
 import (
@@ -97,6 +96,8 @@ func Build() (*MyMainWindow, error) {
 							}
 
 							model := tv.Model().(*DirectoryTreeModel)
+							tv.SetSuspended(true)
+							defer tv.SetSuspended(false)
 							for _, d := range model.roots {
 								ws, err := config.Workspaces()
 								if err != nil {
@@ -105,9 +106,8 @@ func Build() (*MyMainWindow, error) {
 								}
 
 								if ws == d.Path() {
-									filepath.Join(ws, name)
-									nd := NewDirectory(ws, d)
-									model.roots = append(model.roots, nd)
+									nd := NewDirectory(name, d)
+									d.children = append(d.children, nd)
 									model.PublishItemsReset(d)
 								}
 							}
