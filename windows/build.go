@@ -77,49 +77,9 @@ func Build() (*MyMainWindow, error) {
 				},
 				Separator{},
 				Action{
-					Image: ics[5],
-					Text:  "配置",
-					OnTriggered: func() {
-						cf := new(config.Config)
-						ws, err := config.Workspaces()
-
-						if err != nil {
-							mw.errMBox(err)
-							return
-						}
-
-						cf.Workspace = ws
-
-						cmd, err := RunConfigDialog(mw, cf)
-						if err != nil {
-							mw.errMBox(err)
-							return
-						}
-
-						if cmd == walk.DlgCmdOK {
-
-							if err := config.SaveConfig(cf); err != nil {
-								mw.errMBox(err)
-								return
-							}
-
-							mw.ImageName = ""
-
-							model := tv.Model().(*DirectoryTreeModel)
-							root := NewDirectory(cf.Workspace, nil)
-							model.roots = []*Directory{root}
-
-							if err := tv.SetModel(model); err != nil {
-								mw.errMBox(err)
-								return
-							}
-
-							if err := tv.SetCurrentItem(root); err != nil {
-								mw.errMBox(err)
-								return
-							}
-						}
-					},
+					Image:       ics[5],
+					Text:        "配置",
+					OnTriggered: mw.config,
 				},
 			},
 		},

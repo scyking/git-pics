@@ -98,6 +98,48 @@ func (mw *MyMainWindow) addPic() {
 	}
 }
 
+func (mw *MyMainWindow) config() {
+	cf := new(config.Config)
+	ws, err := config.Workspaces()
+
+	if err != nil {
+		mw.errMBox(err)
+		return
+	}
+
+	cf.Workspace = ws
+
+	cmd, err := RunConfigDialog(mw, cf)
+	if err != nil {
+		mw.errMBox(err)
+		return
+	}
+
+	if cmd == walk.DlgCmdOK {
+
+		if err := config.SaveConfig(cf); err != nil {
+			mw.errMBox(err)
+			return
+		}
+
+		mw.ImageName = ""
+
+		model := tv.Model().(*DirectoryTreeModel)
+		root := NewDirectory(cf.Workspace, nil)
+		model.roots = []*Directory{root}
+
+		if err := tv.SetModel(model); err != nil {
+			mw.errMBox(err)
+			return
+		}
+
+		if err := tv.SetCurrentItem(root); err != nil {
+			mw.errMBox(err)
+			return
+		}
+	}
+}
+
 func (mw *MyMainWindow) clickRadio() {
 	log.Println("textType:", mw.DBSource[base.DBTextType])
 	if mw.ImageName != "" {
