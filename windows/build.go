@@ -34,9 +34,6 @@ func init() {
 }
 
 func Build() (*MyMainWindow, error) {
-	var tv *walk.TreeView
-	var hs *walk.Splitter
-	var vs *walk.Splitter
 	var sv *walk.ScrollView
 	var le *walk.LineEdit
 
@@ -69,51 +66,9 @@ func Build() (*MyMainWindow, error) {
 			ButtonStyle: ToolBarButtonImageBeforeText,
 			Items: []MenuItem{
 				Action{
-					Image: ics[0],
-					Text:  "Clone",
-					OnTriggered: func() {
-						var u string
-
-						cmd, err := RunCloneDialog(mw, &u)
-
-						if err != nil {
-							mw.errMBox(err)
-							return
-						}
-
-						if cmd == walk.DlgCmdOK {
-							log.Println("URL:", u)
-
-							if err := git.Clone(u); err != nil {
-								mw.errMBox(err)
-								return
-							}
-
-							name, err := git.RepName(u)
-							if err != nil {
-								mw.errMBox(err)
-								return
-							}
-
-							model := tv.Model().(*DirectoryTreeModel)
-							tv.SetSuspended(true)
-							defer tv.SetSuspended(false)
-							for _, d := range model.roots {
-								ws, err := config.Workspaces()
-								if err != nil {
-									mw.errMBox(err)
-									return
-								}
-
-								if ws == d.Path() {
-									nd := NewDirectory(name, d)
-									d.children = append(d.children, nd)
-									model.PublishItemsReset(d)
-								}
-							}
-
-						}
-					},
+					Image:       ics[0],
+					Text:        "Clone",
+					OnTriggered: mw.clone,
 				},
 				Separator{},
 				Action{
@@ -198,12 +153,21 @@ func Build() (*MyMainWindow, error) {
 		},
 		Children: []Widget{
 			HSplitter{
-				AssignTo: &hs,
 				Children: []Widget{
 					TreeView{
-						AssignTo:      &tv,
+						AssignTo:      &mw.tv,
 						Model:         treeModel,
 						StretchFactor: 1,
+						OnMouseDown: func(x, y int, button walk.MouseButton) {
+							if button != walk.RightButton {
+								return
+							}
+							item := tv.ItemAt(x, y)
+							if item == nil {
+								return
+							}
+							//todo 添加新文件夹
+						},
 						OnCurrentItemChanged: func() {
 
 							path := tv.CurrentItem().(*Directory).Path()
@@ -221,7 +185,7 @@ func Build() (*MyMainWindow, error) {
 						},
 					},
 					VSplitter{
-						AssignTo:      &vs,
+						AssignTo:      &mw.vs,
 						StretchFactor: 3,
 						Children: []Widget{
 							HSplitter{

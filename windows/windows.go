@@ -1,8 +1,10 @@
 package windows
 
 import (
+	"errors"
 	"gpics/base"
 	"gpics/config"
+	"gpics/git"
 	"log"
 )
 
@@ -12,16 +14,54 @@ import (
 
 type MyMainWindow struct {
 	*walk.MainWindow
+	tv        *MyTreeView
+	vs        *walk.Splitter
 	ImageName string
 	DBSource  map[string]int
 }
 
 func (mw *MyMainWindow) errMBox(err error) {
+	log.Println(err)
 	walk.MsgBox(mw.MainWindow, "错误提示", err.Error(), walk.MsgBoxIconError)
 }
 
 func (mw *MyMainWindow) infoMBox(msg string) {
 	walk.MsgBox(mw.MainWindow, "消息提示", msg, walk.MsgBoxOK)
+}
+
+func (mw *MyMainWindow) clone() {
+	var u string
+
+	cmd, err := RunCloneDialog(mw, &u)
+
+	if err != nil {
+		mw.errMBox(err)
+		return
+	}
+
+	if cmd == walk.DlgCmdOK {
+		log.Println("Clone URL:", u)
+
+		if err := git.Clone(u); err != nil {
+			mw.errMBox(err)
+			return
+		}
+
+		name, err := git.RepName(u)
+
+		if err != nil {
+			mw.errMBox(err)
+			return
+		}
+
+		model := mw.tv.Model().(*DirectoryTreeModel)
+		if len(model.roots) < 1 {
+			mw.errMBox(errors.New("tree view 根节点不存在"))
+			return
+		}
+
+		mw.tv.AddItem(name, model.roots[0])
+	}
 }
 
 func (mw *MyMainWindow) clickRadio() {
