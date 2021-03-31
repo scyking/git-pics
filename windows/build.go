@@ -161,6 +161,54 @@ func Build() MainWindow {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+func RunCreateDirDialog(owner walk.Form, u *string) (int, error) {
+	var dlg *walk.Dialog
+	var le *walk.LineEdit
+
+	var acceptPB, cancelPB *walk.PushButton
+
+	return Dialog{
+		AssignTo:      &dlg,
+		Title:         "新建文件夹",
+		DefaultButton: &acceptPB,
+		CancelButton:  &cancelPB,
+		MinSize:       Size{324, 200},
+		Layout:        VBox{},
+		Children: []Widget{
+			Composite{
+				Layout: Grid{Columns: 2},
+				Children: []Widget{
+					Label{
+						Text: "文件夹名称:",
+					},
+					LineEdit{
+						AssignTo: &le,
+					},
+				},
+			},
+			Composite{
+				Layout: HBox{},
+				Children: []Widget{
+					HSpacer{},
+					PushButton{
+						AssignTo: &acceptPB,
+						Text:     "OK",
+						OnClicked: func() {
+							*u = le.Text()
+							dlg.Accept()
+						},
+					},
+					PushButton{
+						AssignTo:  &cancelPB,
+						Text:      "Cancel",
+						OnClicked: func() { dlg.Cancel() },
+					},
+				},
+			},
+		},
+	}.Run(owner)
+}
+
 func RunCloneDialog(owner walk.Form, u *string) (int, error) {
 	var dlg *walk.Dialog
 	var le *walk.LineEdit

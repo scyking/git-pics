@@ -2,6 +2,8 @@ package windows
 
 import (
 	"github.com/lxn/walk"
+	"os"
+	"path/filepath"
 )
 
 type MyTreeView struct {
@@ -42,5 +44,26 @@ func (mw *MyMainWindow) rightClick(x, y int, button walk.MouseButton) {
 	if item == nil {
 		return
 	}
-	//todo 添加新文件夹
+
+	if item.Parent() == nil {
+		return
+	}
+
+	var fn string
+
+	cmd, err := RunCreateDirDialog(mw, &fn)
+	if err != nil {
+		mw.errMBox(err)
+		return
+	}
+
+	if cmd == walk.DlgCmdOK {
+		path := filepath.Join(item.(*Directory).Path(), fn)
+
+		if err := os.Mkdir(path, os.ModeDir); err != nil {
+			mw.errMBox(err)
+			return
+		}
+		mw.tv.AddItem(fn, item.(*Directory))
+	}
 }
