@@ -3,7 +3,6 @@ package windows
 import (
 	"gpics/base"
 	"gpics/config"
-	"gpics/git"
 	"gpics/img"
 	"log"
 	"net/url"
@@ -87,34 +86,11 @@ func Build() (*MyMainWindow, error) {
 			HSplitter{
 				Children: []Widget{
 					TreeView{
-						AssignTo:      &mw.tv,
-						Model:         treeModel,
-						StretchFactor: 1,
-						OnMouseDown: func(x, y int, button walk.MouseButton) {
-							if button != walk.RightButton {
-								return
-							}
-							item := tv.ItemAt(x, y)
-							if item == nil {
-								return
-							}
-							//todo 添加新文件夹
-						},
-						OnCurrentItemChanged: func() {
-
-							path := tv.CurrentItem().(*Directory).Path()
-
-							if err := le.SetText(path); err != nil {
-								mw.errMBox(err)
-								return
-							}
-
-							if err := walk.Resources.SetRootDirPath(path); err != nil {
-								mw.errMBox(err)
-							}
-							ClearWidgets(sv)
-							mw.addImageViewWidgets(sv)
-						},
+						AssignTo:             &mw.tv.TreeView,
+						Model:                treeModel,
+						StretchFactor:        1,
+						OnMouseDown:          mw.tv.rightClick,
+						OnCurrentItemChanged: mw.tv.itemChanged,
 					},
 					VSplitter{
 						AssignTo:      &mw.vs,
