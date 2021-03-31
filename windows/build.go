@@ -19,6 +19,8 @@ func init() {
 	db := make(map[string]int)
 	db[base.DBTextType] = base.FilePath
 	mw.DBSource = db
+
+	mw.tv = new(MyTreeView)
 }
 
 func tbIcons() []*walk.Icon {
