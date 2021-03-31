@@ -6,6 +6,7 @@ import (
 	"gpics/git"
 	"gpics/img"
 	"log"
+	"net/url"
 	"path/filepath"
 )
 
@@ -72,9 +73,9 @@ func Build() (*MyMainWindow, error) {
 					Image: ics[0],
 					Text:  "Clone",
 					OnTriggered: func() {
-						var url string
+						var u string
 
-						cmd, err := RunCloneDialog(mw, &url)
+						cmd, err := RunCloneDialog(mw, &u)
 
 						if err != nil {
 							mw.errMBox(err)
@@ -82,14 +83,14 @@ func Build() (*MyMainWindow, error) {
 						}
 
 						if cmd == walk.DlgCmdOK {
-							log.Println("URL:", url)
+							log.Println("URL:", u)
 
-							if err := git.Clone(url); err != nil {
+							if err := git.Clone(u); err != nil {
 								mw.errMBox(err)
 								return
 							}
 
-							name, err := git.RepName(url)
+							name, err := git.RepName(u)
 							if err != nil {
 								mw.errMBox(err)
 								return
@@ -281,7 +282,7 @@ func Build() (*MyMainWindow, error) {
 	return mw, m.Create()
 }
 
-func RunCloneDialog(owner walk.Form, url *string) (int, error) {
+func RunCloneDialog(owner walk.Form, u *string) (int, error) {
 	var dlg *walk.Dialog
 	var le *walk.LineEdit
 
@@ -306,6 +307,15 @@ func RunCloneDialog(owner walk.Form, url *string) (int, error) {
 					},
 					PushButton{
 						Text: "Test",
+						OnClicked: func() {
+							// 检查是否是一个url
+							_, err := url.ParseRequestURI(le.Text())
+							if err != nil {
+								mw.errMBox(err)
+								return
+							}
+							mw.infoMBox("测试成功")
+						},
 					},
 				},
 			},
@@ -317,7 +327,7 @@ func RunCloneDialog(owner walk.Form, url *string) (int, error) {
 						AssignTo: &acceptPB,
 						Text:     "OK",
 						OnClicked: func() {
-							*url = le.Text()
+							*u = le.Text()
 							dlg.Accept()
 						},
 					},

@@ -20,6 +20,10 @@ func (mw *MyMainWindow) errMBox(err error) {
 	walk.MsgBox(mw.MainWindow, "错误提示", err.Error(), walk.MsgBoxIconError)
 }
 
+func (mw *MyMainWindow) infoMBox(msg string) {
+	walk.MsgBox(mw.MainWindow, "消息提示", msg, walk.MsgBoxOK)
+}
+
 func (mw *MyMainWindow) clickRadio() {
 	log.Println("textType:", mw.DBSource[base.DBTextType])
 	if mw.ImageName != "" {

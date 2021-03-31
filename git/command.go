@@ -1,6 +1,7 @@
 package git
 
 import (
+	"log"
 	"os/exec"
 )
 
@@ -8,6 +9,8 @@ func runGitCommand(dir string, arg ...string) error {
 
 	cmd := exec.Command("git", arg...)
 	cmd.Dir = dir
+
+	log.Println("cmd:", cmd.String())
 
 	return cmd.Run()
 }
