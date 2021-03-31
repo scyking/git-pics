@@ -48,20 +48,7 @@ func Build() (*MyMainWindow, error) {
 			AutoSubmit: true,
 			DataSource: mw.DBSource,
 		},
-		OnDropFiles: func(fps []string) {
-			rootPath := walk.Resources.RootDirPath()
-			for _, fp := range fps {
-				name, err := base.CopyFile(fp, rootPath)
-				if err != nil {
-					mw.errMBox(err)
-				} else {
-					mw.addImageViewWidget(name, sv)
-					if err := git.AutoCommit(); err != nil {
-						mw.errMBox(err)
-					}
-				}
-			}
-		},
+		OnDropFiles: mw.dropFiles,
 		ToolBar: ToolBar{
 			ButtonStyle: ToolBarButtonImageBeforeText,
 			Items: []MenuItem{
@@ -72,30 +59,15 @@ func Build() (*MyMainWindow, error) {
 				},
 				Separator{},
 				Action{
-					Image: ics[2],
-					Text:  "手动提交",
-					OnTriggered: func() {
-						if err := git.AutoCommit(); err != nil {
-							mw.errMBox(err)
-						}
-					},
+					Image:       ics[2],
+					Text:        "手动提交",
+					OnTriggered: mw.commit,
 				},
 				Separator{},
 				Action{
-					Image: ics[3],
-					Text:  "添加图片",
-					OnTriggered: func() {
-						name, err := mw.openImage()
-						if err != nil {
-							mw.errMBox(err)
-						}
-						if name != "" {
-							mw.addImageViewWidget(name, sv)
-							if err := git.AutoCommit(); err != nil {
-								mw.errMBox(err)
-							}
-						}
-					},
+					Image:       ics[3],
+					Text:        "添加图片",
+					OnTriggered: mw.addPic,
 				},
 				Separator{},
 				Action{

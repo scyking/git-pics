@@ -29,6 +29,21 @@ func (mw *MyMainWindow) infoMBox(msg string) {
 	walk.MsgBox(mw.MainWindow, "消息提示", msg, walk.MsgBoxOK)
 }
 
+func (mw *MyMainWindow) dropFiles(fps []string) {
+	rootPath := walk.Resources.RootDirPath()
+	for _, fp := range fps {
+		name, err := base.CopyFile(fp, rootPath)
+		if err != nil {
+			mw.errMBox(err)
+		} else {
+			mw.addImageViewWidget(name, sv)
+			if err := git.AutoCommit(); err != nil {
+				mw.errMBox(err)
+			}
+		}
+	}
+}
+
 func (mw *MyMainWindow) clone() {
 	var u string
 
@@ -61,6 +76,25 @@ func (mw *MyMainWindow) clone() {
 		}
 
 		mw.tv.AddItem(name, model.roots[0])
+	}
+}
+
+func (mw *MyMainWindow) commit() {
+	if err := git.AutoCommit(); err != nil {
+		mw.errMBox(err)
+	}
+}
+
+func (mw *MyMainWindow) addPic() {
+	name, err := mw.openImage()
+	if err != nil {
+		mw.errMBox(err)
+	}
+	if name != "" {
+		mw.addImageViewWidget(name, sv)
+		if err := git.AutoCommit(); err != nil {
+			mw.errMBox(err)
+		}
 	}
 }
 
