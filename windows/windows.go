@@ -37,7 +37,7 @@ func (mw *MyMainWindow) dropFiles(fps []string) {
 		if err != nil {
 			mw.errMBox(err)
 		} else {
-			mw.addImageViewWidget(name, sv)
+			mw.addImageViewWidget(name, mw.sv)
 			if err := git.AutoCommit(); err != nil {
 				mw.errMBox(err)
 			}
@@ -92,7 +92,7 @@ func (mw *MyMainWindow) addPic() {
 		mw.errMBox(err)
 	}
 	if name != "" {
-		mw.addImageViewWidget(name, sv)
+		mw.addImageViewWidget(name, mw.sv)
 		if err := git.AutoCommit(); err != nil {
 			mw.errMBox(err)
 		}
@@ -125,16 +125,16 @@ func (mw *MyMainWindow) config() {
 
 		mw.ImageName = ""
 
-		model := tv.Model().(*DirectoryTreeModel)
+		model := mw.tv.Model().(*DirectoryTreeModel)
 		root := NewDirectory(cf.Workspace, nil)
 		model.roots = []*Directory{root}
 
-		if err := tv.SetModel(model); err != nil {
+		if err := mw.tv.SetModel(model); err != nil {
 			mw.errMBox(err)
 			return
 		}
 
-		if err := tv.SetCurrentItem(root); err != nil {
+		if err := mw.tv.SetCurrentItem(root); err != nil {
 			mw.errMBox(err)
 			return
 		}

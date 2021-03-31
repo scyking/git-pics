@@ -21,6 +21,16 @@ func init() {
 	mw.DBSource = db
 }
 
+func tbIcons() []*walk.Icon {
+	return []*walk.Icon{
+		img.Shell32Icon(149), //clone
+		img.Shell32Icon(46),  //pull
+		img.Shell32Icon(146), //push
+		img.Shell32Icon(36),  //添加图片
+		img.Shell32Icon(34),  //截图
+		img.Shell32Icon(69)}  //配置
+}
+
 func Build() MainWindow {
 
 	ics := tbIcons()
@@ -145,6 +155,9 @@ func Build() MainWindow {
 		},
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 func RunCloneDialog(owner walk.Form, u *string) (int, error) {
 	var dlg *walk.Dialog
@@ -286,17 +299,4 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 			},
 		},
 	}.Run(owner)
-}
-
-func tbIcons() []*walk.Icon {
-
-	ics := []*walk.Icon{
-		img.Shell32Icon(149), //clone
-		img.Shell32Icon(46),  //pull
-		img.Shell32Icon(146), //push
-		img.Shell32Icon(36),  //添加图片
-		img.Shell32Icon(34),  //截图
-		img.Shell32Icon(69)}  //配置
-
-	return ics
 }

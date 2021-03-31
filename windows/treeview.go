@@ -21,16 +21,17 @@ func (tv *MyTreeView) AddItem(name string, parent *Directory) {
 func (tv *MyTreeView) itemChanged() {
 	path := tv.CurrentItem().(*Directory).Path()
 
-	if err := le.SetText(path); err != nil {
+	if err := walk.Resources.SetRootDirPath(path); err != nil {
+		mw.errMBox(err)
+	}
+
+	if err := mw.le.SetText(path); err != nil {
 		mw.errMBox(err)
 		return
 	}
 
-	if err := walk.Resources.SetRootDirPath(path); err != nil {
-		mw.errMBox(err)
-	}
-	ClearWidgets(sv)
-	mw.addImageViewWidgets(sv)
+	ClearWidgets(mw.sv)
+	mw.addImageViewWidgets(mw.sv)
 }
 
 func (tv *MyTreeView) rightClick(x, y int, button walk.MouseButton) {
