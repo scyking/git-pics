@@ -34,7 +34,7 @@ go get github.com/lxn/walk
 ```
 
 #### 构建过程
-> 可查看[walk](https://github.com/lxn/walk/README.md)具体说明
+> 可查看[walk](https://github.com/lxn/walk)具体说明
 
 1. 使用`rsrc tool`，生成`*.syso`文件（不需重复生成）
     ```
