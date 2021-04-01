@@ -2,7 +2,7 @@ package windows
 
 import (
 	"errors"
-	"gpics/config"
+	"gpics/base/config"
 	"log"
 	"os"
 	"path/filepath"

@@ -13,21 +13,23 @@ const (
 )
 
 const (
-	GitInfoServerKey   = "git.info.server"
-	GitInfoUserNameKey = "git.info.username"
-	GitInfoPasswordKey = "git.info.password"
-	GitInfoTokenKey    = "git.info.token"
-	WorkspaceKey       = "workspace"
-	OnQuickKey         = "on-quick"
-	QuickDirKey        = "quick-dir"
-	AutoCommitKey      = "auto-commit"
+	GitInfoRepositoryKey = "git.info.repository"
+	GitInfoServerKey     = "git.info.server"
+	GitInfoUserNameKey   = "git.info.username"
+	GitInfoPasswordKey   = "git.info.password"
+	GitInfoTokenKey      = "git.info.token"
+	WorkspaceKey         = "workspace"
+	OnQuickKey           = "on-quick"
+	QuickDirKey          = "quick-dir"
+	AutoCommitKey        = "auto-commit"
 )
 
 type GitInfo struct {
-	Server   string
-	UserName string
-	Password string
-	Token    string
+	Repository string
+	Server     string
+	UserName   string
+	Password   string
+	Token      string
 }
 
 type Config struct {
@@ -56,6 +58,16 @@ func init() {
 
 func Settings() walk.Settings {
 	return walk.App().Settings()
+}
+
+func Value(key string) (string, error) {
+	st := Settings()
+	v, ok := st.Get(key)
+
+	if !ok {
+		return "", errors.New("获取配置失败,KEY:" + key)
+	}
+	return v, nil
 }
 
 func Workspace() (string, bool) {

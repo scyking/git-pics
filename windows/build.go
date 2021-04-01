@@ -2,8 +2,8 @@ package windows
 
 import (
 	"gpics/base"
-	"gpics/config"
-	"gpics/img"
+	"gpics/base/config"
+	"gpics/base/img"
 	"log"
 )
 

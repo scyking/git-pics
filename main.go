@@ -1,9 +1,9 @@
 package main
 
 import (
-	"gpics/config"
-	"gpics/git"
-	"gpics/img"
+	"gpics/base/config"
+	"gpics/base/git"
+	"gpics/base/img"
 	"gpics/windows"
 	"log"
 )

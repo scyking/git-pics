@@ -3,8 +3,8 @@ package windows
 import (
 	"errors"
 	"gpics/base"
-	"gpics/config"
-	"gpics/git"
+	"gpics/base/config"
+	"gpics/base/git"
 	"log"
 )
 

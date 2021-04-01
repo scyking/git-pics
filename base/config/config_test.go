@@ -1,18 +1,17 @@
 package config_test
 
 import (
-	"gpics/config"
 	"log"
 	"testing"
 )
 
 func TestWorkspaces(t *testing.T) {
-	log.Println(config.Workspace())
+	log.Println(Workspace())
 }
 
 func TestSettings(t *testing.T) {
-	s := config.Settings()
-	ws, ok := s.Get(config.WorkspaceKey)
+	s := Settings()
+	ws, ok := s.Get(WorkspaceKey)
 	if !ok {
 		log.Println("工作空间配置不存在")
 	}
@@ -20,18 +19,18 @@ func TestSettings(t *testing.T) {
 }
 
 func TestSaveWorkspace(t *testing.T) {
-	cf := new(config.Config)
+	cf := new(Config)
 	cf.Workspace = ""
 
-	if err := config.Save(cf); err != nil {
+	if err := Save(cf); err != nil {
 		log.Println(err)
 	}
 
-	log.Println(config.Workspace())
+	log.Println(Workspace())
 }
 
 func TestSaveConfig(t *testing.T) {
-	cf := new(config.Config)
+	cf := new(Config)
 	cf.Workspace = ""
-	config.Save(cf)
+	Save(cf)
 }

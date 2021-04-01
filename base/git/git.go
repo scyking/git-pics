@@ -3,24 +3,11 @@ package git
 import (
 	"errors"
 	"github.com/lxn/walk"
-	"gpics/config"
 	"log"
 	"net/url"
 	"strings"
 	"sync"
 )
-
-// 获取git url
-func Url(dir string) (*url.URL, error) {
-	r, err := remote(dir)
-	if err != nil {
-		return nil, err
-	}
-
-	st := strings.Split(r, " ")
-	s := strings.Split(st[0], "\t")
-	return url.Parse(s[1])
-}
 
 func RepName(u string) (string, error) {
 	rs, err := url.Parse(u)
@@ -33,29 +20,6 @@ func RepName(u string) (string, error) {
 		return "", errors.New("解析仓库名称失败")
 	}
 	return strings.TrimSuffix(us[2], ".git"), nil
-}
-
-func UrlStr(dir string) (string, error) {
-	u, err := Url(dir)
-	if err != nil {
-		return "", err
-	}
-
-	return strings.TrimSuffix(u.String(), ".git"), nil
-}
-
-func Clone(url string) error {
-
-	dir, ok := config.Workspace()
-	if !ok {
-		return errors.New("获取工作空间配置失败")
-	}
-
-	if url == "" {
-		return errors.New("Git 地址不正确 ")
-	}
-
-	return clone(dir, url)
 }
 
 func Pull() error {
@@ -72,6 +36,19 @@ func Push() error {
 
 func Version() error {
 	return version("")
+}
+
+func Branch() (string, error) {
+	dir := walk.Resources.RootDirPath()
+	b, err := branch(dir)
+	if err != nil {
+		return "", nil
+	}
+	sts := strings.Split(b, " ")
+	if len(sts) < 2 {
+		return "", errors.New("解析当前分支失败" + b)
+	}
+	return sts[1], nil
 }
 
 var mu = new(sync.Mutex)

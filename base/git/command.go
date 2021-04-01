@@ -46,6 +46,10 @@ func version(dir string) error {
 	return runGitCommand(dir, "version")
 }
 
+func branch(dir string) (string, error) {
+	return outGitCommand(dir, "branch")
+}
+
 func remote(dir string) (string, error) {
 	return outGitCommand(dir, "remote", "-v")
 }

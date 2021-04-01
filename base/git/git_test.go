@@ -1,19 +1,16 @@
 package git_test
 
 import (
-	"gpics/git"
+	"gpics/base/git"
 	"log"
+	"net/url"
 	"testing"
 )
 
 func TestUrl(t *testing.T) {
-	url, err := git.Url("")
-	log.Println(url, err)
-}
-
-func TestUrlStr(t *testing.T) {
-	url, err := git.UrlStr("")
-	log.Println(url, err)
+	log.Println(url.Parse("https://github.com/scyking"))
+	log.Println(url.Parse("https://github.com//scyking"))
+	log.Println(url.Parse("https://github.com/scyking/"))
 }
 
 func TestAutoCommit(t *testing.T) {
