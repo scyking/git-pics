@@ -5,23 +5,37 @@ import (
 	"github.com/lxn/walk"
 	"io/ioutil"
 	"log"
-	"os"
-	"path/filepath"
 )
 
 const (
-	Author        = "scyking"
-	PName         = "GPics"
-	defaultWSName = "GPicsWorkspace"
+	Author = "scyking"
+	PName  = "GPics"
 )
 
 const (
-	WorkspaceKey = "workspace"
+	GitInfoServerKey   = "git.info.server"
+	GitInfoUserNameKey = "git.info.username"
+	GitInfoPasswordKey = "git.info.password"
+	GitInfoTokenKey    = "git.info.token"
+	WorkspaceKey       = "workspace"
+	OnQuickKey         = "on-quick"
+	QuickDirKey        = "quick-dir"
+	AutoCommitKey      = "auto-commit"
 )
+
+type GitInfo struct {
+	Server   string
+	UserName string
+	Password string
+	Token    string
+}
 
 type Config struct {
+	GitInfo
 	Workspace  string
-	AutoCommit bool
+	OnQuick    bool   //开启快捷上传
+	QuickDir   string //快捷上传目录
+	AutoCommit bool   //自动提交到远程
 }
 
 func init() {
@@ -58,7 +72,7 @@ func SetWorkspace(ws string) error {
 	return st.Save()
 }
 
-func SaveConfig(cf *Config) error {
+func Save(cf *Config) error {
 
 	dirs, err := ioutil.ReadDir(cf.Workspace)
 	if err != nil {
@@ -78,11 +92,7 @@ func SaveConfig(cf *Config) error {
 	return st.Save()
 }
 
-func defaultWS() string {
-	rp := walk.Resources.RootDirPath()
-	ws := filepath.Join(rp, defaultWSName)
-	if err := os.Mkdir(ws, os.ModeDir); err != nil {
-		log.Fatal(err)
-	}
-	return ws
+func Reset() error {
+	// 重置
+	return nil
 }

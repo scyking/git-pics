@@ -7,11 +7,7 @@ import (
 )
 
 func TestWorkspaces(t *testing.T) {
-	ws, err := config.Workspace()
-	if err != nil {
-		log.Println("err:", err)
-	}
-	log.Println("workspace:", ws)
+	log.Println(config.Workspace())
 }
 
 func TestSettings(t *testing.T) {
@@ -27,18 +23,15 @@ func TestSaveWorkspace(t *testing.T) {
 	cf := new(config.Config)
 	cf.Workspace = ""
 
-	if err := config.SaveConfig(cf); err != nil {
+	if err := config.Save(cf); err != nil {
 		log.Println(err)
 	}
-	if ws, err := config.Workspace(); err != nil {
-		log.Println(err)
-	} else {
-		log.Println(ws)
-	}
+
+	log.Println(config.Workspace())
 }
 
 func TestSaveConfig(t *testing.T) {
 	cf := new(config.Config)
 	cf.Workspace = ""
-	config.SaveConfig(cf)
+	config.Save(cf)
 }

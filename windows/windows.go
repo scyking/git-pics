@@ -83,7 +83,7 @@ func (mw *MyMainWindow) config() {
 
 	if cmd == walk.DlgCmdOK {
 
-		if err := config.SaveConfig(cf); err != nil {
+		if err := config.Save(cf); err != nil {
 			mw.errMBox(err)
 			return
 		}

@@ -10,13 +10,6 @@ import (
 	"sync"
 )
 
-type Info struct {
-	Server   string
-	UserName string
-	Password string
-	Token    string
-}
-
 // 获取git url
 func Url(dir string) (*url.URL, error) {
 	r, err := remote(dir)
