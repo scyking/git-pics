@@ -37,14 +37,14 @@ go get github.com/lxn/walk
 > 可查看[walk](https://github.com/lxn/walk/README.md)具体说明
 
 1. 使用`rsrc tool`，生成`*.syso`文件（不需重复生成）
-```
-rsrc -manifest main.manifest -o main.syso
-```
+    ```
+    rsrc -manifest main.manifest -o main.syso
+    ```
 1. 构建
-```
-// 调试(运行会有调试窗口)
-go build
-// 正式构建
-go build -ldflags="-H windowsgui"
-```
+    ```
+    // 调试(运行会有调试窗口)
+    go build
+    // 正式构建
+    go build -ldflags="-H windowsgui"
+    ```
 1. 运行生成的`.exe`文件
