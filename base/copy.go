@@ -23,7 +23,7 @@ const (
 func markdown(name string) (string, error) {
 	url, err := url(name)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 	v := fmt.Sprintf("![%s](%s)", name, url)
 	return v, nil
@@ -32,7 +32,7 @@ func markdown(name string) (string, error) {
 func html(name string) (string, error) {
 	url, err := url(name)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 	v := fmt.Sprintf("<img src=%q width=%q>", url, "50%")
 	return v, nil
