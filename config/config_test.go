@@ -7,7 +7,7 @@ import (
 )
 
 func TestWorkspaces(t *testing.T) {
-	ws, err := config.Workspaces()
+	ws, err := config.Workspace()
 	if err != nil {
 		log.Println("err:", err)
 	}
@@ -30,7 +30,7 @@ func TestSaveWorkspace(t *testing.T) {
 	if err := config.SaveConfig(cf); err != nil {
 		log.Println(err)
 	}
-	if ws, err := config.Workspaces(); err != nil {
+	if ws, err := config.Workspace(); err != nil {
 		log.Println(err)
 	} else {
 		log.Println(ws)

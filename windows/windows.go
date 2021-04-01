@@ -45,41 +45,6 @@ func (mw *MyMainWindow) dropFiles(fps []string) {
 	}
 }
 
-func (mw *MyMainWindow) clone() {
-	var u string
-
-	cmd, err := RunCloneDialog(mw, &u)
-
-	if err != nil {
-		mw.errMBox(err)
-		return
-	}
-
-	if cmd == walk.DlgCmdOK {
-		log.Println("Clone URL:", u)
-
-		if err := git.Clone(u); err != nil {
-			mw.errMBox(err)
-			return
-		}
-
-		name, err := git.RepName(u)
-
-		if err != nil {
-			mw.errMBox(err)
-			return
-		}
-
-		model := mw.tv.Model().(*DirectoryTreeModel)
-		if len(model.roots) < 1 {
-			mw.errMBox(errors.New("tree view 根节点不存在"))
-			return
-		}
-
-		mw.tv.AddItem(name, model.roots[0])
-	}
-}
-
 func (mw *MyMainWindow) commit() {
 	if err := git.AutoCommit(); err != nil {
 		mw.errMBox(err)
@@ -101,10 +66,10 @@ func (mw *MyMainWindow) addPic() {
 
 func (mw *MyMainWindow) config() {
 	cf := new(config.Config)
-	ws, err := config.Workspaces()
+	ws, ok := config.Workspace()
 
-	if err != nil {
-		mw.errMBox(err)
+	if !ok {
+		mw.errMBox(errors.New("获取工作空间配置失败"))
 		return
 	}
 
@@ -150,19 +115,13 @@ func (mw *MyMainWindow) clickRadio() {
 	}
 }
 
-func (mw *MyMainWindow) openDir() (string, error) {
+func OpenDir(owner walk.Form, dir string) (string, error) {
 	dlg := new(walk.FileDialog)
 
-	ws, err := config.Workspaces()
-	if err != nil {
-		return "", err
-	}
-	log.Println("当前工作空间", ws)
+	dlg.Title = "选择文件夹"
+	dlg.FilePath = dir
 
-	dlg.FilePath = ws
-	dlg.Title = "选择工作空间"
-
-	ok, err := dlg.ShowBrowseFolder(mw)
+	ok, err := dlg.ShowBrowseFolder(owner)
 
 	if err != nil {
 		return "", err

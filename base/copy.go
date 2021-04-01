@@ -39,9 +39,9 @@ func html(name string, rootPath string) (string, error) {
 }
 
 func url(name string, rootPath string) (string, error) {
-	workspace, err := config.Workspaces()
-	if err != nil {
-		return "", err
+	ws, ok := config.Workspace()
+	if !ok {
+		return "", errors.New("获取工作空间配置失败")
 	}
 	abs := filepath.Join(rootPath, name)
 
@@ -53,7 +53,7 @@ func url(name string, rootPath string) (string, error) {
 	}
 
 	// 获取资源地址相对工作空间地址的绝对地址
-	rel, err := filepath.Rel(workspace, abs)
+	rel, err := filepath.Rel(ws, abs)
 	if err != nil {
 		return "", err
 	}
@@ -69,9 +69,9 @@ func filePath(name string, rootPath string) (string, error) {
 
 func pathByTextType(name string, textType int) (string, error) {
 	rootPath := walk.Resources.RootDirPath()
-	ws, err := config.Workspaces()
-	if err != nil {
-		return "", err
+	ws, ok := config.Workspace()
+	if !ok {
+		return "", errors.New("获取工作空间配置失败")
 	}
 	if ws == rootPath {
 		return "", errors.New("图片无法应用")

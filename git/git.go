@@ -53,9 +53,9 @@ func UrlStr(dir string) (string, error) {
 
 func Clone(url string) error {
 
-	dir, err := config.Workspaces()
-	if err != nil {
-		return err
+	dir, ok := config.Workspace()
+	if !ok {
+		return errors.New("获取工作空间配置失败")
 	}
 
 	if url == "" {

@@ -30,20 +30,10 @@ func init() {
 	app.SetProductName(PName)
 
 	settings := walk.NewIniFileSettings("settings.ini")
-	log.Println("setting file path：", settings.FilePath())
-	log.Println("init root path: ", walk.Resources.RootDirPath())
+	log.Println("配置文件路径：", settings.FilePath())
+	log.Println("初始资源根路径: ", walk.Resources.RootDirPath())
 
 	if err := settings.Load(); err != nil {
-		log.Fatal(err)
-	}
-
-	if _, ok := settings.Get(WorkspaceKey); !ok {
-		if err := settings.Put(WorkspaceKey, defaultWS()); err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	if err := settings.Save(); err != nil {
 		log.Fatal(err)
 	}
 
@@ -54,13 +44,18 @@ func Settings() walk.Settings {
 	return walk.App().Settings()
 }
 
-// 工作空间
-func Workspaces() (string, error) {
-	w, ok := Settings().Get(WorkspaceKey)
-	if !ok {
-		return "", errors.New("工作空间配置不存在")
+func Workspace() (string, bool) {
+	return Settings().Get(WorkspaceKey)
+}
+
+func SetWorkspace(ws string) error {
+	st := Settings()
+
+	if err := st.Put(WorkspaceKey, ws); err != nil {
+		return err
 	}
-	return w, nil
+
+	return st.Save()
 }
 
 func SaveConfig(cf *Config) error {

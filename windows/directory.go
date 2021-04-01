@@ -1,6 +1,7 @@
 package windows
 
 import (
+	"errors"
 	"gpics/config"
 	"log"
 	"os"
@@ -107,10 +108,10 @@ type DirectoryTreeModel struct {
 func NewDirectoryTreeModel() (*DirectoryTreeModel, error) {
 	model := new(DirectoryTreeModel)
 
-	drive, err := config.Workspaces()
+	drive, ok := config.Workspace()
 
-	if err != nil {
-		return nil, err
+	if !ok {
+		return nil, errors.New("获取工作空间配置失败")
 	}
 
 	model.roots = append(model.roots, NewDirectory(drive, nil))

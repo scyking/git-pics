@@ -5,7 +5,6 @@ import (
 	"gpics/config"
 	"gpics/img"
 	"log"
-	"net/url"
 )
 
 import (
@@ -58,12 +57,6 @@ func Build() MainWindow {
 		ToolBar: ToolBar{
 			ButtonStyle: ToolBarButtonImageBeforeText,
 			Items: []MenuItem{
-				Action{
-					Image:       ics[0],
-					Text:        "Clone",
-					OnTriggered: mw.clone,
-				},
-				Separator{},
 				Action{
 					Image:       ics[2],
 					Text:        "手动提交",
@@ -209,67 +202,6 @@ func RunCreateDirDialog(owner walk.Form, u *string) (int, error) {
 	}.Run(owner)
 }
 
-func RunCloneDialog(owner walk.Form, u *string) (int, error) {
-	var dlg *walk.Dialog
-	var le *walk.LineEdit
-
-	var acceptPB, cancelPB *walk.PushButton
-
-	return Dialog{
-		AssignTo:      &dlg,
-		Title:         "Clone",
-		DefaultButton: &acceptPB,
-		CancelButton:  &cancelPB,
-		MinSize:       Size{324, 200},
-		Layout:        VBox{},
-		Children: []Widget{
-			Composite{
-				Layout: Grid{Columns: 3},
-				Children: []Widget{
-					Label{
-						Text: "URL:",
-					},
-					LineEdit{
-						AssignTo: &le,
-					},
-					PushButton{
-						Text: "Test",
-						OnClicked: func() {
-							// 检查是否是一个url
-							_, err := url.ParseRequestURI(le.Text())
-							if err != nil {
-								mw.errMBox(err)
-								return
-							}
-							mw.infoMBox("测试成功")
-						},
-					},
-				},
-			},
-			Composite{
-				Layout: HBox{},
-				Children: []Widget{
-					HSpacer{},
-					PushButton{
-						AssignTo: &acceptPB,
-						Text:     "OK",
-						OnClicked: func() {
-							*u = le.Text()
-							dlg.Accept()
-						},
-					},
-					PushButton{
-						AssignTo:  &cancelPB,
-						Text:      "Cancel",
-						OnClicked: func() { dlg.Cancel() },
-					},
-				},
-			},
-		},
-	}.Run(owner)
-
-}
-
 func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 	var dlg *walk.Dialog
 	var le *walk.LineEdit
@@ -304,10 +236,10 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 						Text:     Bind("Workspace"),
 					},
 					ToolButton{
-						Name:  "选择",
+						Text:  "选择文件夹",
 						Image: ic,
 						OnClicked: func() {
-							ws, err := mw.openDir()
+							ws, err := OpenDir(mw, le.Text())
 							if ws == "" {
 								return
 							}
