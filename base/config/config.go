@@ -65,7 +65,7 @@ func Value(key string) (string, error) {
 	v, ok := st.Get(key)
 
 	if !ok {
-		return "", errors.New("获取配置失败,KEY:" + key)
+		return "", errors.New("获取配置失败，key=" + key)
 	}
 	return v, nil
 }
