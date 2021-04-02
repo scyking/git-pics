@@ -49,3 +49,19 @@ go get github.com/lxn/walk
     go build -ldflags="-H windowsgui"
     ```
 1. 运行生成的`.exe`文件
+
+## 目录结构
+
+```
+gpics
+├─ base       基础操作
+│  ├─ config 应用配置
+│  ├─ git    封装git相关命令
+│  └─ img    读取Image资源
+│ 
+├─ windows    窗口构建相关
+│ 
+├─ main.go 
+│  
+
+```
