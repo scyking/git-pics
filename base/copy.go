@@ -53,12 +53,12 @@ func url(name string) (string, error) {
 		return "", err
 	}
 
-	server, err := config.Value(config.GitInfoServerKey)
+	server, err := config.StringValue(config.GitInfoServerKey)
 	if err != nil {
 		return "", err
 	}
 
-	rep, err := config.Value(config.GitInfoRepositoryKey)
+	rep, err := config.StringValue(config.GitInfoRepositoryKey)
 	if err != nil {
 		return "", err
 	}

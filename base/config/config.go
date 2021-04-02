@@ -5,6 +5,7 @@ import (
 	"github.com/lxn/walk"
 	"io/ioutil"
 	"log"
+	"strconv"
 )
 
 const (
@@ -53,6 +54,22 @@ func init() {
 		log.Fatal(err)
 	}
 
+	if _, ok := settings.Get(OnQuickKey); !ok {
+		if err := settings.Put(OnQuickKey, strconv.FormatBool(false)); err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if _, ok := settings.Get(AutoCommitKey); !ok {
+		if err := settings.Put(AutoCommitKey, strconv.FormatBool(false)); err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if err := settings.Save(); err != nil {
+		log.Fatal(err)
+	}
+
 	app.SetSettings(settings)
 }
 
@@ -60,14 +77,26 @@ func Settings() walk.Settings {
 	return walk.App().Settings()
 }
 
-func Value(key string) (string, error) {
-	st := Settings()
-	v, ok := st.Get(key)
+func StringValue(key string) (string, error) {
+	v, ok := Settings().Get(key)
 
 	if !ok {
 		return "", errors.New("获取配置失败，key=" + key)
 	}
 	return v, nil
+}
+
+func BoolValue(key string) (bool, error) {
+	v, err := StringValue(key)
+	if err != nil {
+		return false, err
+	}
+
+	r, err := strconv.ParseBool(v)
+	if err != nil {
+		return false, err
+	}
+	return r, nil
 }
 
 func Workspace() (string, bool) {
@@ -105,6 +134,15 @@ func Save(cf *Config) error {
 }
 
 func Reset() error {
-	// 重置
+	st := Settings()
+	if err := st.Put(OnQuickKey, strconv.FormatBool(false)); err != nil {
+		return err
+	}
+	if err := st.Put(QuickDirKey, ""); err != nil {
+		return err
+	}
+	if err := st.Put(AutoCommitKey, strconv.FormatBool(false)); err != nil {
+		return err
+	}
 	return nil
 }
