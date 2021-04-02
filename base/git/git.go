@@ -3,6 +3,7 @@ package git
 import (
 	"errors"
 	"github.com/lxn/walk"
+	"gpics/base/config"
 	"log"
 	"net/url"
 	"strings"
@@ -54,15 +55,21 @@ func Branch() (string, error) {
 var mu = new(sync.Mutex)
 
 func AutoCommit() (e error) {
-	dir := walk.Resources.RootDirPath()
-	if err := add(dir, "."); err != nil {
+	ws, ok := config.Workspace()
+	if !ok {
+		return errors.New("自动提交失败，原因：获取工作空间失败")
+	}
+
+	if err := add(ws, "."); err != nil {
 		return err
 	}
-	if err := commit(dir, "添加图片"); err != nil {
+	if err := commit(ws, "自动提交"); err != nil {
 		return err
 	}
 
-	go remoteCommit(mu)
+	if v, _ := config.BoolValue(config.AutoCommitKey); v {
+		go remoteCommit(mu)
+	}
 	return nil
 }
 
