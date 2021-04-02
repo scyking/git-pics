@@ -1,7 +1,7 @@
 package config
 
 import (
-	"errors"
+	"fmt"
 	"github.com/lxn/walk"
 	"io/ioutil"
 	"log"
@@ -73,6 +73,24 @@ func init() {
 	app.SetSettings(settings)
 }
 
+func NewConfig() *Config {
+	cf := new(Config)
+
+	cf.Workspace, _ = StringValue(WorkspaceKey)
+
+	cf.AutoCommit, _ = BoolValue(AutoCommitKey)
+	cf.OnQuick, _ = BoolValue(OnQuickKey)
+
+	cf.QuickDir, _ = StringValue(QuickDirKey)
+	cf.Repository, _ = StringValue(GitInfoRepositoryKey)
+	cf.Server, _ = StringValue(GitInfoServerKey)
+	cf.UserName, _ = StringValue(GitInfoUserNameKey)
+	cf.Password, _ = StringValue(GitInfoPasswordKey)
+	cf.Token, _ = StringValue(GitInfoTokenKey)
+
+	return cf
+}
+
 func Settings() walk.Settings {
 	return walk.App().Settings()
 }
@@ -81,7 +99,7 @@ func StringValue(key string) (string, error) {
 	v, ok := Settings().Get(key)
 
 	if !ok {
-		return "", errors.New("获取配置失败，key=" + key)
+		return "", fmt.Errorf("获取配置失败，key=%q", key)
 	}
 	return v, nil
 }
@@ -120,13 +138,40 @@ func Save(cf *Config) error {
 		return nil
 	}
 
-	if len(dirs) > 0 {
-		return errors.New("请选择空文件夹作为工作空间")
+	for _, d := range dirs {
+		if d.Name() == ".git" {
+			break
+		}
+		return fmt.Errorf("%q不是一个git项目根目录", cf.Workspace)
 	}
 
 	st := Settings()
 
 	if err := st.Put(WorkspaceKey, cf.Workspace); err != nil {
+		return err
+	}
+	if err := st.Put(AutoCommitKey, strconv.FormatBool(cf.AutoCommit)); err != nil {
+		return err
+	}
+	if err := st.Put(OnQuickKey, strconv.FormatBool(cf.OnQuick)); err != nil {
+		return err
+	}
+	if err := st.Put(QuickDirKey, cf.QuickDir); err != nil {
+		return err
+	}
+	if err := st.Put(GitInfoRepositoryKey, cf.Repository); err != nil {
+		return err
+	}
+	if err := st.Put(GitInfoServerKey, cf.Server); err != nil {
+		return err
+	}
+	if err := st.Put(GitInfoUserNameKey, cf.UserName); err != nil {
+		return err
+	}
+	if err := st.Put(GitInfoPasswordKey, cf.Password); err != nil {
+		return err
+	}
+	if err := st.Put(GitInfoTokenKey, cf.Token); err != nil {
 		return err
 	}
 

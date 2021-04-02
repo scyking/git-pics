@@ -204,7 +204,7 @@ func RunCreateDirDialog(owner walk.Form, u *string) (int, error) {
 
 func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 	var dlg *walk.Dialog
-	var le *walk.LineEdit
+	var wsl, qdl *walk.LineEdit
 	var db *walk.DataBinder
 	var acceptPB, cancelPB *walk.PushButton
 
@@ -301,7 +301,7 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 										Text: "上传目录:",
 									},
 									LineEdit{
-										AssignTo: &le,
+										AssignTo: &qdl,
 										ReadOnly: true,
 										Text:     Bind("QuickDir"),
 									},
@@ -309,7 +309,7 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 										Text:  "选择文件夹",
 										Image: img.Shell32Icon(4),
 										OnClicked: func() {
-											ws, err := OpenDir(mw, le.Text())
+											ws, err := OpenDir(mw, qdl.Text())
 											if ws == "" {
 												return
 											}
@@ -318,7 +318,7 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 												mw.errMBox(err)
 											}
 
-											if err := le.SetText(ws); err != nil {
+											if err := qdl.SetText(ws); err != nil {
 												mw.errMBox(err)
 												return
 											}
@@ -364,7 +364,7 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 										Text: "工作空间:",
 									},
 									LineEdit{
-										AssignTo: &le,
+										AssignTo: &wsl,
 										ReadOnly: true,
 										Text:     Bind("Workspace"),
 									},
@@ -372,7 +372,7 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 										Text:  "选择文件夹",
 										Image: img.Shell32Icon(4),
 										OnClicked: func() {
-											ws, err := OpenDir(mw, le.Text())
+											ws, err := OpenDir(mw, wsl.Text())
 											if ws == "" {
 												return
 											}
@@ -381,7 +381,7 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 												mw.errMBox(err)
 											}
 
-											if err := le.SetText(ws); err != nil {
+											if err := wsl.SetText(ws); err != nil {
 												mw.errMBox(err)
 												return
 											}

@@ -20,6 +20,20 @@ func (tv *MyTreeView) AddItem(name string, parent *Directory) {
 	model.PublishItemsReset(parent)
 }
 
+func (tv *MyTreeView) RootChanged(root string) error {
+	model := tv.Model().(*DirectoryTreeModel)
+	model.roots = []*Directory{NewDirectory(root, nil)}
+
+	if err := tv.SetModel(model); err != nil {
+		return err
+	}
+
+	if err := tv.SetCurrentItem(model.roots[0]); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (mw *MyMainWindow) itemChanged() {
 	path := mw.tv.CurrentItem().(*Directory).Path()
 

@@ -1,7 +1,6 @@
 package windows
 
 import (
-	"errors"
 	"gpics/base"
 	"gpics/base/config"
 	"gpics/base/git"
@@ -65,15 +64,10 @@ func (mw *MyMainWindow) addPic() {
 }
 
 func (mw *MyMainWindow) config() {
-	cf := new(config.Config)
-	ws, ok := config.Workspace()
 
-	if !ok {
-		mw.errMBox(errors.New("获取工作空间配置失败"))
-		return
-	}
+	cf := config.NewConfig()
 
-	cf.Workspace = ws
+	oldWs := cf.Workspace
 
 	cmd, err := RunConfigDialog(mw, cf)
 	if err != nil {
@@ -88,20 +82,13 @@ func (mw *MyMainWindow) config() {
 			return
 		}
 
-		mw.ImageName = ""
-
-		model := mw.tv.Model().(*DirectoryTreeModel)
-		root := NewDirectory(cf.Workspace, nil)
-		model.roots = []*Directory{root}
-
-		if err := mw.tv.SetModel(model); err != nil {
-			mw.errMBox(err)
+		if oldWs == cf.Workspace {
 			return
 		}
 
-		if err := mw.tv.SetCurrentItem(root); err != nil {
+		mw.ImageName = ""
+		if err := mw.tv.RootChanged(cf.Workspace); err != nil {
 			mw.errMBox(err)
-			return
 		}
 	}
 }
