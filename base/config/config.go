@@ -139,7 +139,7 @@ func Save(cf *Config) error {
 	}
 
 	for _, d := range dirs {
-		if d.Name() == ".git" {
+		if d.IsDir() && d.Name() == ".git" {
 			break
 		}
 		return fmt.Errorf("%q不是一个git项目根目录", cf.Workspace)
