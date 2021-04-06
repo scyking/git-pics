@@ -77,6 +77,8 @@ func AutoCommit() (e error) {
 }
 
 func RemoteCommit() error {
+	timeout, _ := config.IntValue(config.TimeOutKey)
+
 	ch := make(chan error)
 	defer close(ch)
 	go remoteCommit(mu, ch)
@@ -84,7 +86,7 @@ func RemoteCommit() error {
 	select {
 	case err := <-ch:
 		return err
-	case <-time.After(time.Second * 3):
+	case <-time.After(time.Second * time.Duration(timeout)):
 		return errors.New("请求超时！")
 	}
 }

@@ -23,6 +23,7 @@ const (
 	OnQuickKey           = "on-quick"
 	QuickDirKey          = "quick-dir"
 	AutoCommitKey        = "auto-commit"
+	TimeOutKey           = "remote-commit-timeout"
 )
 
 type GitInfo struct {
@@ -39,6 +40,7 @@ type Config struct {
 	OnQuick    bool   //开启快捷上传
 	QuickDir   string //快捷上传目录
 	AutoCommit bool   //自动提交到远程
+	TimeOut    int    //超时时间（单位：s）
 }
 
 func init() {
@@ -87,6 +89,7 @@ func NewConfig() *Config {
 	cf.UserName, _ = StringValue(GitInfoUserNameKey)
 	cf.Password, _ = StringValue(GitInfoPasswordKey)
 	cf.Token, _ = StringValue(GitInfoTokenKey)
+	cf.TimeOut, _ = IntValue(TimeOutKey)
 
 	return cf
 }
@@ -102,6 +105,21 @@ func StringValue(key string) (string, error) {
 		return "", fmt.Errorf("获取配置失败，key=%q", key)
 	}
 	return v, nil
+}
+
+func IntValue(key string) (int, error) {
+	// 默认超时时间
+	dto := 3
+
+	v, err := StringValue(key)
+	if err != nil {
+		return dto, err
+	}
+	r, err := strconv.ParseUint(v, 10, 0)
+	if err != nil {
+		return dto, err
+	}
+	return int(r), nil
 }
 
 func BoolValue(key string) (bool, error) {
