@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"time"
 )
 
 func RepName(u string) (string, error) {
@@ -76,25 +77,33 @@ func AutoCommit() (e error) {
 }
 
 func RemoteCommit() error {
-	//ch := make(chan error)
-	//defer close(ch)
-	go remoteCommit(mu)
+	ch := make(chan error)
+	defer close(ch)
+	go remoteCommit(mu, ch)
 
-	return nil
+	select {
+	case err := <-ch:
+		return err
+	case <-time.After(time.Second * 3):
+		return errors.New("请求超时！")
+	}
 }
 
 // 因网络等原因 很容易超时失败
-func remoteCommit(mu *sync.Mutex) {
+func remoteCommit(mu *sync.Mutex, ch chan error) {
 	mu.Lock()
 	defer mu.Unlock()
 
 	if err := Pull(); err != nil {
 		log.Println("pull err:", err)
+		ch <- errors.New("pull 失败")
 		return
 	}
 	if err := Push(); err != nil {
 		log.Println("push err:", err)
+		ch <- errors.New("push 失败")
 		return
 	}
+	ch <- nil
 	log.Println("提交 成功")
 }
