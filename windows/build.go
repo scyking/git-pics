@@ -236,18 +236,21 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 							},
 							LineEdit{
 								ColumnSpan: 2,
+								Text:       Bind("Repository"),
 							},
 							Label{
 								Text: "Server:",
 							},
 							LineEdit{
 								ColumnSpan: 2,
+								Text:       Bind("Server"),
 							},
 							Label{
 								Text: "UserName:",
 							},
 							LineEdit{
 								ColumnSpan: 2,
+								Text:       Bind("UserName"),
 							},
 							Label{
 								Text: "Password:",
@@ -255,12 +258,14 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 							LineEdit{
 								ColumnSpan:   2,
 								PasswordMode: true,
+								Text:         Bind("Password"),
 							},
 							Label{
 								Text: "Token:",
 							},
 							LineEdit{
 								ColumnSpan: 2,
+								Text:       Bind("Token"),
 							},
 						},
 					},
@@ -280,12 +285,15 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 										Layout: HBox{},
 										Children: []Widget{
 											RadioButtonGroup{
+												DataMember: "OnQuick",
 												Buttons: []RadioButton{
 													{
-														Text: "ON",
+														Text:  "ON",
+														Value: true,
 													},
 													{
-														Text: "OFF",
+														Text:  "OFF",
+														Value: false,
 													},
 												},
 											},
@@ -343,12 +351,15 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 										Layout: HBox{},
 										Children: []Widget{
 											RadioButtonGroup{
+												DataMember: "AutoCommit",
 												Buttons: []RadioButton{
 													{
-														Text: "ON",
+														Text:  "ON",
+														Value: true,
 													},
 													{
-														Text: "OFF",
+														Text:  "OFF",
+														Value: false,
 													},
 												},
 											},
