@@ -68,8 +68,18 @@ func AutoCommit() (e error) {
 	}
 
 	if v, _ := config.BoolValue(config.AutoCommitKey); v {
-		go remoteCommit(mu)
+		if err := RemoteCommit(); err != nil {
+			return err
+		}
 	}
+	return nil
+}
+
+func RemoteCommit() error {
+	//ch := make(chan error)
+	//defer close(ch)
+	go remoteCommit(mu)
+
 	return nil
 }
 

@@ -38,3 +38,7 @@ func TestBranch(t *testing.T) {
 	log.Println(strings.TrimSuffix("dev\n", "\n"))
 	log.Println(git.Branch())
 }
+
+func TestRemoteCommit(t *testing.T) {
+	log.Println("result:", git.RemoteCommit())
+}

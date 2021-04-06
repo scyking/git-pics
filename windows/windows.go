@@ -46,7 +46,7 @@ func (mw *MyMainWindow) dropFiles(fps []string) {
 }
 
 func (mw *MyMainWindow) commit() {
-	if err := git.AutoCommit(); err != nil {
+	if err := git.RemoteCommit(); err != nil {
 		mw.errMBox(err)
 	}
 }
