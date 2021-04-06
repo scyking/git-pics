@@ -4,6 +4,7 @@ import (
 	"gpics/base/git"
 	"log"
 	"net/url"
+	"strings"
 	"testing"
 )
 
@@ -31,5 +32,9 @@ func TestRepName(t *testing.T) {
 }
 
 func TestBranch(t *testing.T) {
+	log.Println("dev\n", "test")
+	log.Println(len("dev\n"))
+	log.Println(len("\n"))
+	log.Println(strings.TrimSuffix("dev\n", "\n"))
 	log.Println(git.Branch())
 }
