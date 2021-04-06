@@ -162,20 +162,20 @@ func CopyFile(filePath string, target string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	name := genFileName() + filepath.Ext(filePath)
 
-	filename := filepath.Join(target, name)
+	name := genFileName() + filepath.Ext(filePath)
+	image := name
 
 	if ok, _ := config.BoolValue(config.OnQuickKey); ok {
 		if dir, _ := config.StringValue(config.QuickDirKey); dir != "" {
 			if target != dir {
 				target = dir
-				name = ""
+				image = ""
 			}
 		}
 	}
 
-	return name, ioutil.WriteFile(filename, src, fs.ModeAppend)
+	return image, ioutil.WriteFile(filepath.Join(target, name), src, fs.ModeAppend)
 }
 
 func genFileName() string {
