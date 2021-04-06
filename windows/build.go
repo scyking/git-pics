@@ -372,6 +372,20 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 								Layout:     HBox{},
 								Children: []Widget{
 									Label{
+										Text: "超时时间:",
+									},
+									Slider{
+										MinValue: 1,
+										MaxValue: 10,
+										Value:    Bind("TimeOut"),
+									},
+								},
+							},
+							Composite{
+								ColumnSpan: 3,
+								Layout:     HBox{},
+								Children: []Widget{
+									Label{
 										Text: "工作空间:",
 									},
 									LineEdit{

@@ -68,6 +68,12 @@ func init() {
 		}
 	}
 
+	if _, ok := settings.Get(TimeOutKey); !ok {
+		if err := settings.Put(TimeOutKey, "3"); err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	if err := settings.Save(); err != nil {
 		log.Fatal(err)
 	}
@@ -190,6 +196,9 @@ func Save(cf *Config) error {
 		return err
 	}
 	if err := st.Put(GitInfoTokenKey, cf.Token); err != nil {
+		return err
+	}
+	if err := st.Put(TimeOutKey, strconv.FormatInt(int64(cf.TimeOut), 10)); err != nil {
 		return err
 	}
 
