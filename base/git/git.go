@@ -49,7 +49,7 @@ func Branch() (string, error) {
 	if len(sts) < 2 {
 		return "", errors.New("解析当前分支失败" + b)
 	}
-	return sts[1], nil
+	return strings.Replace(sts[1], "\n", "", -1), nil
 }
 
 var mu = new(sync.Mutex)

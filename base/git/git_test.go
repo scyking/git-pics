@@ -29,3 +29,7 @@ func TestRepName(t *testing.T) {
 	name, err := git.RepName("https://github.com/scyking/test.git")
 	log.Println(name, err)
 }
+
+func TestBranch(t *testing.T) {
+	log.Println(git.Branch())
+}
