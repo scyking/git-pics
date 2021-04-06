@@ -30,12 +30,13 @@ func (mw *MyMainWindow) infoMBox(msg string) {
 }
 
 func (mw *MyMainWindow) dropFiles(fps []string) {
-	rootPath := walk.Resources.RootDirPath()
+	path := walk.Resources.RootDirPath()
+
 	for _, fp := range fps {
-		name, err := base.CopyFile(fp, rootPath)
+		name, err := base.CopyFile(fp, path)
 		if err != nil {
 			mw.errMBox(err)
-		} else {
+		} else if name != "" {
 			mw.addImageViewWidget(name, mw.sv)
 			if err := git.AutoCommit(); err != nil {
 				mw.errMBox(err)

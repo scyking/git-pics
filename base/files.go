@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/hex"
 	"fmt"
+	"gpics/base/config"
 	"io/fs"
 	"io/ioutil"
 	"math/rand"
@@ -155,15 +156,26 @@ func ImageFileNames(filePath string) ([]string, error) {
 }
 
 // 将filepath中文件拷贝到目标target目录中
+// 返回新添加图片文件名，用于生成图片组件。如不是资源根目录，返回""
 func CopyFile(filePath string, target string) (string, error) {
-
 	src, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return "", err
 	}
 	name := genFileName() + filepath.Ext(filePath)
 
-	return name, ioutil.WriteFile(filepath.Join(target, name), src, fs.ModeAppend)
+	filename := filepath.Join(target, name)
+
+	if ok, _ := config.BoolValue(config.OnQuickKey); ok {
+		if dir, _ := config.StringValue(config.QuickDirKey); dir != "" {
+			if target != dir {
+				target = dir
+				name = ""
+			}
+		}
+	}
+
+	return name, ioutil.WriteFile(filename, src, fs.ModeAppend)
 }
 
 func genFileName() string {

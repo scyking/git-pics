@@ -74,7 +74,7 @@ func (mw *MyMainWindow) addImageView(name string, parent walk.Container) ImageVi
 }
 
 func (mw *MyMainWindow) openImage() (string, error) {
-	rootPath := walk.Resources.RootDirPath()
+	path := walk.Resources.RootDirPath()
 
 	dlg := new(walk.FileDialog)
 
@@ -90,5 +90,5 @@ func (mw *MyMainWindow) openImage() (string, error) {
 		return "", nil
 	}
 
-	return base.CopyFile(dlg.FilePath, rootPath)
+	return base.CopyFile(dlg.FilePath, path)
 }
