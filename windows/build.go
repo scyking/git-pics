@@ -375,9 +375,10 @@ func RunConfigDialog(owner walk.Form, cf *config.Config) (int, error) {
 										Text: "超时时间:",
 									},
 									Slider{
-										MinValue: 1,
-										MaxValue: 10,
-										Value:    Bind("TimeOut"),
+										MinValue:       1,
+										MaxValue:       10,
+										ToolTipsHidden: false,
+										Value:          Bind("TimeOut"),
 									},
 								},
 							},
