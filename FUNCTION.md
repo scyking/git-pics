@@ -9,18 +9,18 @@
 
 #### 主界面说明
 
-<img src="https://github.com/scyking/my-pics/blob/mastergpics/2021471036659.png" width="50%">
+<img src="https://github.com/scyking/my-pics/blob/master/gpics/2021471036659.png" width="50%">
 
 #### 添加工作空间
 > 工作空间需要是图床项目根目录（即包含`.git`文件夹目录），否则无法正常使用。
 
 - 初次启动（或者配置文件更改），通过弹出对话框添加
 
-    <img src="https://github.com/scyking/my-pics/blob/mastergpics/20214710212181.png" width="50%">
+    <img src="https://github.com/scyking/my-pics/blob/master/gpics/20214710212181.png" width="50%">
     
 - 通过菜单栏配置项对话框添加
 
-    <img src="https://github.com/scyking/my-pics/blob/mastergpics/2021471024087.png" width="50%">
+    <img src="https://github.com/scyking/my-pics/blob/master/gpics/2021471024087.png" width="50%">
     
 #### 添加图片
 

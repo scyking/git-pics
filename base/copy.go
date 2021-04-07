@@ -68,7 +68,7 @@ func url(name string) (string, error) {
 		return "", err
 	}
 
-	url := "https://" + server + "/" + rep + "/blob/" + branch + strings.ReplaceAll(rel, "\\", "/")
+	url := "https://" + server + "/" + rep + "/blob/" + branch + "/" + strings.ReplaceAll(rel, "\\", "/")
 
 	return url, nil
 }
