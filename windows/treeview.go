@@ -59,10 +59,6 @@ func (mw *MyMainWindow) rightClick(x, y int, button walk.MouseButton) {
 		return
 	}
 
-	if item.Parent() == nil {
-		return
-	}
-
 	var fn string
 
 	cmd, err := RunCreateDirDialog(mw, &fn)
